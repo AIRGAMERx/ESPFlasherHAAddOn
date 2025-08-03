@@ -1,0 +1,45 @@
+name: ESPFlasher Web
+version: "1.0.0"
+slug: espflasher_web
+description: Configure and flash ESP32 devices directly via web interface.
+url: https://github.com/yourname/espflasher_web
+arch:
+  - aarch64
+  - amd64
+  - armv7
+  - i386
+startup: application
+boot: auto
+
+# Ingress deaktiviert
+ingress: false
+
+# Sichtbar im Seitenmenü
+panel_icon: mdi:chip
+panel_title: ESPFlasher
+
+# WebUI: öffnet im neuen Tab
+webui: "http://[HOST]:[PORT:8099]"
+
+# Lokales Netzwerk für OTA (mDNS etc.)
+host_network: true
+
+ports:
+  8099/tcp: 8099
+
+map:
+  - config:rw
+  - share:rw
+  - cache:rw
+  - www:rw
+
+devices:
+  - /dev/ttyUSB0
+  - /dev/ttyUSB1
+  - /dev/ttyACM0
+usb: true
+privileged:
+  - SYS_RAWIO
+
+options: {}
+schema: {}
