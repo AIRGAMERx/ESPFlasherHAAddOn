@@ -5,6 +5,7 @@ from flask_cors import CORS
 import json
 import traceback
 import shutil
+import socket
 
 app = Flask(__name__, static_folder="/app/www", static_url_path="/")
 CORS(app)
@@ -120,6 +121,35 @@ def index():
 @app.route("/ping")
 def ping():
     return "pong"
+@app.route('/scan', methods=['GET'])
+def scan():
+    subnet = request.args.get('subnet', '192.168.178')
+    ports_raw = request.args.get('ports', '80')
+    ports = [int(p.strip()) for p in ports_raw.split(',') if p.strip().isdigit()]
+    
+    found_devices = []
+
+    for i in range(1, 255):
+        ip = f"{subnet}.{i}"
+        try:
+            if ping(ip, timeout=0.3):  # Optional: schneller Check ob IP aktiv
+                open_ports = []
+                for port in ports:
+                    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                    sock.settimeout(0.3)
+                    result = sock.connect_ex((ip, port))
+                    if result == 0:
+                        open_ports.append(port)
+                    sock.close()
+                if open_ports:
+                    found_devices.append({
+                        "ip": ip,
+                        "ports": open_ports
+                    })
+        except Exception:
+            continue
+
+    return jsonify(found_devices)
 
 @app.route("/flash", methods=["POST"])
 def flash_device():
