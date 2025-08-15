@@ -1,10 +1,10 @@
 {
   "Template Sensoren": {
-    "Berechnung": {
+    "Calculation": {
       "platform": "template",
       "sensor_class": "template",
       "werte": [
-        "Berechneter Wert basierend auf anderen Sensoren"
+        "Calculated value based on other sensors"
       ],
       "required": [
         "name",
@@ -28,7 +28,7 @@
       "ui_fields": {
         "name": {
           "type": "TextBox",
-          "placeholder": "Berechnete Temperatur"
+          "placeholder": "Calculated temperature"
         },
         "lambda": {
           "type": "TextBox",
@@ -101,22 +101,22 @@
         }
       },
       "info": [
-        "Virtueller Sensor",
-        "Lambda-Funktion erforderlich",
-        "Referenziert andere Sensoren"
+        "Virtual sensor",
+        "Lambda function required",
+        "References other sensors"
       ],
       "lambda_examples": [
-        "// Durchschnitt: return (id(temp1).state + id(temp2).state) / 2;",
-        "// Fahrenheit zu Celsius: return (id(temp_f).state - 32) * 5/9;",
-        "// Differenz: return id(temp_out).state - id(temp_in).state;",
+        "// Average: return (id(temp1).state + id(temp2).state) / 2;",
+        "// Fahrenheit to Celsius: return (id(temp_f).state - 32) * 5/9;",
+        "// Difference: return id(temp_out).state - id(temp_in).state;",
         "// Maximum: return max(id(temp1).state, id(temp2).state);"
       ]
     },
-    "Umrechnung": {
+    "Conversion": {
       "platform": "template",
       "sensor_class": "sensor",
       "werte": [
-        "Einheitenumrechnung (F zu C, bar zu psi, etc.)"
+        "Unit conversion (F to C, bar to psi, etc.)"
       ],
       "required": [
         "name",
@@ -137,7 +137,7 @@
       "ui_fields": {
         "name": {
           "type": "TextBox",
-          "placeholder": "Temperatur in Fahrenheit"
+          "placeholder": "Temperature in Fahrenheit"
         },
         "lambda": {
           "type": "TextBox",
@@ -171,21 +171,21 @@
         }
       },
       "info": [
-        "Einheitenkonvertierung",
-        "Für verschiedene Maßeinheiten"
+        "Unit conversion",
+        "For different measurement units"
       ],
       "lambda_examples": [
-        "// Celsius zu Fahrenheit: return id(temp_c).state * 9/5 + 32;",
-        "// Meter zu Feet: return id(distance_m).state * 3.28084;",
-        "// Bar zu PSI: return id(pressure_bar).state * 14.5038;",
-        "// km/h zu mph: return id(speed_kmh).state * 0.621371;"
+        "// Celsius to Fahrenheit: return id(temp_c).state * 9/5 + 32;",
+        "// Meters to feet: return id(distance_m).state * 3.28084;",
+        "// Bar to PSI: return id(pressure_bar).state * 14.5038;",
+        "// km/h to mph: return id(speed_kmh).state * 0.621371;"
       ]
     },
-    "Zeit_basiert": {
+    "Time_based": {
       "platform": "template",
       "sensor_class": "sensor",
       "werte": [
-        "Zeitbasierte Werte (Stunde, Tag, etc.)"
+        "Time-based values (hour, day, etc.)"
       ],
       "required": [
         "name",
@@ -206,7 +206,7 @@
       "ui_fields": {
         "name": {
           "type": "TextBox",
-          "placeholder": "Aktuelle Stunde"
+          "placeholder": "Current hour"
         },
         "lambda": {
           "type": "TextBox",
@@ -240,21 +240,21 @@
         }
       },
       "info": [
-        "Zeit-Komponente erforderlich",
-        "FÜr zeitbasierte Logik"
+        "Requires time component",
+        "For time-based logic"
       ],
       "lambda_examples": [
-        "// Aktuelle Stunde: return id(sntp_time).now().hour;",
-        "// Wochentag (1=Mo): return id(sntp_time).now().day_of_week;",
-        "// Tag im Monat: return id(sntp_time).now().day_of_month;",
-        "// Minuten seit Mitternacht: return id(sntp_time).now().hour * 60 + id(sntp_time).now().minute;"
+        "// Current hour: return id(sntp_time).now().hour;",
+        "// Day of week (1=Mon): return id(sntp_time).now().day_of_week;",
+        "// Day of month: return id(sntp_time).now().day_of_month;",
+        "// Minutes since midnight: return id(sntp_time).now().hour * 60 + id(sntp_time).now().minute;"
       ]
     },
-    "Statistik": {
+    "Statistics": {
       "platform": "template",
       "sensor_class": "sensor",
       "werte": [
-        "Statistische Auswertungen (Min, Max, Trend)"
+        "Statistical evaluations (Min, Max, Trend)"
       ],
       "required": [
         "name",
@@ -275,7 +275,7 @@
       "ui_fields": {
         "name": {
           "type": "TextBox",
-          "placeholder": "Temperatur Trend"
+          "placeholder": "Temperature Trend"
         },
         "lambda": {
           "type": "TextBox",
@@ -308,22 +308,262 @@
         }
       },
       "info": [
-        "Erweiterte Lambda-Funktionen",
-        "Statische Variablen möglich"
+        "Advanced lambda functions",
+        "Static variables possible"
       ],
       "lambda_examples": [
-        "// Trend berechnen: static float last = 0; float diff = id(sensor).state - last; last = id(sensor).state; return diff;",
-        "// Durchschnitt 3 Werte: return (id(s1).state + id(s2).state + id(s3).state) / 3;",
-        "// Differenz zu gestern: return id(heute).state - id(gestern).state;"
+        "// Calculate trend: static float last = 0; float diff = id(sensor).state - last; last = id(sensor).state; return diff;",
+        "// Average of 3 values: return (id(s1).state + id(s2).state + id(s3).state) / 3;",
+        "// Difference to yesterday: return id(today).state - id(yesterday).state;"
       ]
     }
   },
-  "Template Binary Sensoren": {
-    "Schwellwert": {
+  "Template Number": {
+    "Setpoint": {
+      "platform": "template",
+      "sensor_class": "number",
+      "werte": [
+        "Control/target value from UI"
+      ],
+      "required": [
+        "name",
+        "min_value",
+        "max_value",
+        "step"
+      ],
+      "optional": [
+        "initial_value",
+        "optimistic",
+        "unit_of_measurement",
+        "lambda"
+      ],
+      "baseconfig": [
+        "disabled_by_default"
+      ],
+      "disable_by_default": [
+        "True",
+        "False"
+      ],
+      "ui_fields": {
+        "name": {
+          "type": "TextBox",
+          "placeholder": "Target temperature"
+        },
+        "min_value": {
+          "type": "NumericUpDown",
+          "min": -1000,
+          "max": 1000,
+          "step": 0.1
+        },
+        "max_value": {
+          "type": "NumericUpDown",
+          "min": -1000,
+          "max": 1000,
+          "step": 0.1
+        },
+        "step": {
+          "type": "NumericUpDown",
+          "min": 0.01,
+          "max": 100,
+          "step": 0.01
+        },
+        "initial_value": {
+          "type": "NumericUpDown",
+          "min": -1000,
+          "max": 1000,
+          "step": 0.1
+        },
+        "unit_of_measurement": {
+          "type": "ComboBox",
+          "values": [
+            "°C",
+            "V",
+            "A",
+            "W",
+            "%",
+            ""
+          ]
+        },
+        "optimistic": {
+          "type": "CheckBox"
+        },
+        "lambda": {
+          "type": "TextBox",
+          "multiline": true,
+          "placeholder": "id(target).publish_state(x);"
+        }
+      },
+      "info": [
+        "Virtual number for control purposes",
+        "Ideal for thresholds, offsets"
+      ]
+    }
+  },
+  "Template Select": {
+    "OperatingMode": {
+      "platform": "template",
+      "sensor_class": "select",
+      "werte": [
+        "Selection of modes"
+      ],
+      "required": [
+        "name",
+        "options"
+      ],
+      "optional": [
+        "initial_option",
+        "optimistic",
+        "lambda"
+      ],
+      "baseconfig": [
+        "disabled_by_default"
+      ],
+      "disable_by_default": [
+        "True",
+        "False"
+      ],
+      "ui_fields": {
+        "name": {
+          "type": "TextBox",
+          "placeholder": "Mode"
+        },
+        "options": {
+          "type": "TextBox",
+          "multiline": true,
+          "placeholder": "- Auto\n- Manual\n- Off"
+        },
+        "initial_option": {
+          "type": "TextBox",
+          "placeholder": "Auto"
+        },
+        "optimistic": {
+          "type": "CheckBox"
+        },
+        "lambda": {
+          "type": "TextBox",
+          "multiline": true,
+          "placeholder": "if (x == \"Auto\") { /* ... */ }"
+        }
+      },
+      "info": [
+        "Virtual mode selection",
+        "Good for profiles/strategies"
+      ]
+    }
+  },
+  "Template Button": {
+    "Action": {
+      "platform": "template",
+      "sensor_class": "button",
+      "werte": [
+        "One-time action from UI"
+      ],
+      "required": [
+        "name",
+        "press_action"
+      ],
+      "optional": [
+        "icon"
+      ],
+      "baseconfig": [
+        "disabled_by_default"
+      ],
+      "disable_by_default": [
+        "True",
+        "False"
+      ],
+      "ui_fields": {
+        "name": {
+          "type": "TextBox",
+          "placeholder": "Calibrate"
+        },
+        "press_action": {
+          "type": "TextBox",
+          "multiline": true,
+          "placeholder": "- logger.log: \"Calibrating...\"\n- sensor.template.publish:\n    id: offset\n    state: 0"
+        },
+        "icon": {
+          "type": "TextBox",
+          "placeholder": "mdi:gesture-tap-button"
+        }
+      },
+      "info": [
+        "Virtual button",
+        "Triggers an action"
+      ]
+    }
+  },
+  "Template Cover": {
+    "Virtual_Blind": {
+      "platform": "template",
+      "sensor_class": "cover",
+      "werte": [
+        "Open/Close/Stop & Position"
+      ],
+      "required": [
+        "name",
+        "open_action",
+        "close_action",
+        "stop_action"
+      ],
+      "optional": [
+        "assumed_state",
+        "lambda_position",
+        "lambda_tilt"
+      ],
+      "baseconfig": [
+        "disabled_by_default"
+      ],
+      "disable_by_default": [
+        "True",
+        "False"
+      ],
+      "ui_fields": {
+        "name": {
+          "type": "TextBox",
+          "placeholder": "Living Room Blind"
+        },
+        "open_action": {
+          "type": "TextBox",
+          "multiline": true,
+          "placeholder": "- switch.turn_on: up_relay"
+        },
+        "close_action": {
+          "type": "TextBox",
+          "multiline": true,
+          "placeholder": "- switch.turn_on: down_relay"
+        },
+        "stop_action": {
+          "type": "TextBox",
+          "multiline": true,
+          "placeholder": "- switch.turn_off: up_relay\n- switch.turn_off: down_relay"
+        },
+        "assumed_state": {
+          "type": "CheckBox"
+        },
+        "lambda_position": {
+          "type": "TextBox",
+          "multiline": true,
+          "placeholder": "// return 0.0..1.0 based on runtime"
+        },
+        "lambda_tilt": {
+          "type": "TextBox",
+          "multiline": true,
+          "placeholder": "// optional for slats"
+        }
+      },
+      "info": [
+        "Virtual cover",
+        "Position optionally via logic"
+      ]
+    }
+  },
+  "Template Binary Sensors": {
+    "Threshold": {
       "platform": "template",
       "sensor_class": "binary_sensor",
       "werte": [
-        "Schwellwert-Überwachung (größer/kleiner als)"
+        "Threshold monitoring (greater/less than)"
       ],
       "required": [
         "name",
@@ -343,7 +583,7 @@
       "ui_fields": {
         "name": {
           "type": "TextBox",
-          "placeholder": "Temperatur zu hoch"
+          "placeholder": "Temperature too high"
         },
         "lambda": {
           "type": "TextBox",
@@ -371,21 +611,21 @@
         }
       },
       "info": [
-        "Überwachung von Grenzwerten",
-        "Gibt true/false zuruck"
+        "Monitoring of limit values",
+        "Returns true/false"
       ],
       "lambda_examples": [
-        "// Temperatur über 25°C: return id(temp).state > 25.0;",
-        "// Luftfeuchtigkeit unter 30%: return id(humidity).state < 30.0;",
-        "// Spannung im Bereich: return id(voltage).state >= 3.0 && id(voltage).state <= 3.6;",
-        "// Sensor nicht verfügbar: return isnan(id(sensor).state);"
+        "// Temperature above 25°C: return id(temp).state > 25.0;",
+        "// Humidity below 30%: return id(humidity).state < 30.0;",
+        "// Voltage within range: return id(voltage).state >= 3.0 && id(voltage).state <= 3.6;",
+        "// Sensor unavailable: return isnan(id(sensor).state);"
       ]
     },
-    "Zeit_Zustand": {
+    "Time_State": {
       "platform": "template",
       "sensor_class": "binary_sensor",
       "werte": [
-        "Zeitbasierte Zustände (Tag/Nacht, Werktag)"
+        "Time-based states (day/night, weekday)"
       ],
       "required": [
         "name",
@@ -405,7 +645,7 @@
       "ui_fields": {
         "name": {
           "type": "TextBox",
-          "placeholder": "Nacht Modus"
+          "placeholder": "Night mode"
         },
         "lambda": {
           "type": "TextBox",
@@ -429,21 +669,21 @@
         }
       },
       "info": [
-        "Zeit-Komponente erforderlich",
-        "Für zeitgesteuerte Automatisierung"
+        "Time component required",
+        "For time-controlled automation"
       ],
       "lambda_examples": [
-        "// Nacht (22-6 Uhr): auto t = id(sntp_time).now(); return t.hour >= 22 || t.hour <= 6;",
-        "// Werktag (Mo-Fr): auto t = id(sntp_time).now(); return t.day_of_week >= 1 && t.day_of_week <= 5;",
-        "// Arbeitsstunden: auto t = id(sntp_time).now(); return t.hour >= 8 && t.hour <= 17;",
-        "// Wochenende: auto t = id(sntp_time).now(); return t.day_of_week == 6 || t.day_of_week == 7;"
+        "// Night (22-6): auto t = id(sntp_time).now(); return t.hour >= 22 || t.hour <= 6;",
+        "// Weekday (Mon-Fri): auto t = id(sntp_time).now(); return t.day_of_week >= 1 && t.day_of_week <= 5;",
+        "// Working hours: auto t = id(sntp_time).now(); return t.hour >= 8 && t.hour <= 17;",
+        "// Weekend: auto t = id(sntp_time).now(); return t.day_of_week == 6 || t.day_of_week == 7;"
       ]
     },
-    "Kombination": {
+    "Combination": {
       "platform": "template",
       "sensor_class": "binary_sensor",
       "werte": [
-        "Kombinierte Bedingungen (UND/ODER Verknüpfung)"
+        "Combined conditions (AND/OR logic)"
       ],
       "required": [
         "name",
@@ -463,7 +703,7 @@
       "ui_fields": {
         "name": {
           "type": "TextBox",
-          "placeholder": "Optimale Bedingungen"
+          "placeholder": "Optimal conditions"
         },
         "lambda": {
           "type": "TextBox",
@@ -488,21 +728,21 @@
         }
       },
       "info": [
-        "Mehrere Bedingungen kombinieren",
-        "Logische Operatoren: &&, ||, !"
+        "Combine multiple conditions",
+        "Logical operators: &&, ||, !"
       ],
       "lambda_examples": [
-        "// Alle Bedingungen: return id(temp).state > 20 && id(hum).state < 60 && id(light).state;",
-        "// Eine von mehreren: return id(motion1).state || id(motion2).state || id(door).state;",
-        "// Nicht-Bedingung: return !id(rain_sensor).state && id(wind).state < 10;",
-        "// Komplex: return (id(temp).state > 20 && id(hum).state < 70) || id(manual_override).state;"
+        "// All conditions: return id(temp).state > 20 && id(hum).state < 60 && id(light).state;",
+        "// One of several: return id(motion1).state || id(motion2).state || id(door).state;",
+        "// NOT condition: return !id(rain_sensor).state && id(wind).state < 10;",
+        "// Complex: return (id(temp).state > 20 && id(hum).state < 70) || id(manual_override).state;"
       ]
     },
-    "GPIO_Taster": {
+    "GPIO_Button": {
       "platform": "template",
       "sensor_class": "binary_sensor",
       "werte": [
-        "Virtueller Taster basierend auf GPIO"
+        "Virtual button based on GPIO"
       ],
       "required": [
         "name",
@@ -524,7 +764,7 @@
       "ui_fields": {
         "name": {
           "type": "TextBox",
-          "placeholder": "Taster Wohnzimmer"
+          "placeholder": "Living room button"
         },
         "lambda": {
           "type": "TextBox",
@@ -544,12 +784,12 @@
         "on_press": {
           "type": "TextBox",
           "multiline": true,
-          "placeholder": "- switch.toggle: relay1\n- logger.log: \"Taster gedrückt\""
+          "placeholder": "- switch.toggle: relay1\n- logger.log: \"Button pressed\""
         },
         "on_release": {
           "type": "TextBox",
           "multiline": true,
-          "placeholder": "- logger.log: \"Taster losgelassen\""
+          "placeholder": "- logger.log: \"Button released\""
         },
         "icon": {
           "type": "TextBox",
@@ -557,20 +797,20 @@
         }
       },
       "info": [
-        "Referenziert GPIO Binary Sensor",
-        "Template für erweiterte Logik"
+        "References GPIO binary sensor",
+        "Template for advanced logic"
       ],
       "lambda_examples": [
-        "// GPIO-Status abfragen: return id(gpio_button).state;",
-        "// Invertiert: return !id(gpio_button).state;",
-        "// Mit Entprellung: static bool last = false; bool current = id(gpio_button).state; if (current != last) { last = current; return current; } return false;"
+        "// Read GPIO state: return id(gpio_button).state;",
+        "// Inverted: return !id(gpio_button).state;",
+        "// With debounce: static bool last = false; bool current = id(gpio_button).state; if (current != last) { last = current; return current; } return false;"
       ]
     },
-    "Zustandsänderung": {
+    "State_Change": {
       "platform": "template",
       "sensor_class": "binary_sensor",
       "werte": [
-        "Erkennung von Änderungen (steigend/fallend)"
+        "Detecting changes (rising/falling)"
       ],
       "required": [
         "name",
@@ -590,7 +830,7 @@
       "ui_fields": {
         "name": {
           "type": "TextBox",
-          "placeholder": "Temperatur steigt"
+          "placeholder": "Temperature rising"
         },
         "lambda": {
           "type": "TextBox",
@@ -614,22 +854,22 @@
         }
       },
       "info": [
-        "Statische Variablen fÜr Vergleich",
-        "Trend-Erkennung"
+        "Static variables for comparison",
+        "Trend detection"
       ],
       "lambda_examples": [
-        "// Steigend: static float last = 0; bool up = id(sensor).state > last + 1; last = id(sensor).state; return up;",
-        "// Schnelle Änderung: static float last = 0; bool fast = abs(id(sensor).state - last) > 5; last = id(sensor).state; return fast;",
-        "// Über Zeit: static uint32_t last_time = 0; if (millis() - last_time > 60000) { last_time = millis(); return true; } return false;"
+        "// Rising: static float last = 0; bool up = id(sensor).state > last + 1; last = id(sensor).state; return up;",
+        "// Rapid change: static float last = 0; bool fast = abs(id(sensor).state - last) > 5; last = id(sensor).state; return fast;",
+        "// Over time: static uint32_t last_time = 0; if (millis() - last_time > 60000) { last_time = millis(); return true; } return false;"
       ]
     }
   },
-  "Template Text Sensoren": {
+  "Template Text Sensors": {
     "Status_Text": {
       "platform": "template",
       "sensor_class": "text_sensor",
       "werte": [
-        "Textuelle Statusmeldungen"
+        "Textual status messages"
       ],
       "required": [
         "name",
@@ -654,7 +894,7 @@
         "lambda": {
           "type": "TextBox",
           "multiline": true,
-          "placeholder": "if (id(temp).state > 30) return \"Heiß\";\nelse if (id(temp).state > 20) return \"Warm\";\nelse return \"Kalt\";"
+          "placeholder": "if (id(temp).state > 30) return \"Hot\";\nelse if (id(temp).state > 20) return \"Warm\";\nelse return \"Cold\";"
         },
         "icon": {
           "type": "TextBox",
@@ -672,21 +912,21 @@
         }
       },
       "info": [
-        "Textuelle Ausgabe",
-        "Bedingte Texte basierend auf Sensoren"
+        "Textual output",
+        "Conditional text based on sensors"
       ],
       "lambda_examples": [
-        "// Zustand bewerten: if (id(temp).state > 25) return \"Heiß\"; return \"OK\";",
-        "// Mehrere Bedingungen: if (id(temp).state > 30) return \"Zu heiß\"; else if (id(temp).state < 10) return \"Zu kalt\"; return \"Optimal\";",
-        "// Zeit-Text: auto t = id(sntp_time).now(); return t.strftime(\"%H:%M\");",
-        "// Sensor-Kombination: return \"T:\" + to_string(id(temp).state) + \"°C H:\" + to_string(id(hum).state) + \"%\";"
+        "// Evaluate state: if (id(temp).state > 25) return \"Hot\"; return \"OK\";",
+        "// Multiple conditions: if (id(temp).state > 30) return \"Too hot\"; else if (id(temp).state < 10) return \"Too cold\"; return \"Optimal\";",
+        "// Time text: auto t = id(sntp_time).now(); return t.strftime(\"%H:%M\");",
+        "// Sensor combination: return \"T:\" + to_string(id(temp).state) + \"°C H:\" + to_string(id(hum).state) + \"%\";"
       ]
     },
-    "Formatierung": {
+    "Formatting": {
       "platform": "template",
       "sensor_class": "text_sensor",
       "werte": [
-        "Formatierte Sensorwerte als Text"
+        "Formatted sensor values as text"
       ],
       "required": [
         "name",
@@ -706,12 +946,12 @@
       "ui_fields": {
         "name": {
           "type": "TextBox",
-          "placeholder": "Temperatur formatiert"
+          "placeholder": "Formatted temperature"
         },
         "lambda": {
           "type": "TextBox",
           "multiline": true,
-          "placeholder": "return \"Temperatur: \" + to_string(id(temp).state) + \"°C\";"
+          "placeholder": "return \"Temperature: \" + to_string(id(temp).state) + \"°C\";"
         },
         "icon": {
           "type": "TextBox",
@@ -728,23 +968,23 @@
         }
       },
       "info": [
-        "Text-Formatierung",
-        "Sensordaten als String"
+        "Text formatting",
+        "Sensor data as string"
       ],
       "lambda_examples": [
-        "// Einfach: return to_string(id(temp).state) + \"°C\";",
-        "// Mit Beschreibung: return \"Aktuell: \" + to_string(id(temp).state) + \"°C\";",
-        "// Mehrere Werte: return \"T:\" + to_string(id(temp).state) + \" H:\" + to_string(id(hum).state);",
-        "// Zeitstempel: auto t = id(sntp_time).now(); return \"Messung um \" + t.strftime(\"%H:%M\");"
+        "// Simple: return to_string(id(temp).state) + \"°C\";",
+        "// With description: return \"Current: \" + to_string(id(temp).state) + \"°C\";",
+        "// Multiple values: return \"T:\" + to_string(id(temp).state) + \" H:\" + to_string(id(hum).state);",
+        "// Timestamp: auto t = id(sntp_time).now(); return \"Measured at \" + t.strftime(\"%H:%M\");"
       ]
     }
   },
   "Template Switches": {
-    "Logik_Switch": {
+    "Logic_Switch": {
       "platform": "template",
       "sensor_class": "switch",
       "werte": [
-        "Virtueller Schalter mit eigener Logik"
+        "Virtual switch with custom logic"
       ],
       "required": [
         "name",
@@ -767,7 +1007,7 @@
       "ui_fields": {
         "name": {
           "type": "TextBox",
-          "placeholder": "Master Schalter"
+          "placeholder": "Master Switch"
         },
         "turn_on_action": {
           "type": "TextBox",
@@ -796,13 +1036,13 @@
         }
       },
       "info": [
-        "Virtueller Schalter",
-        "Steuert andere Komponenten"
+        "Virtual switch",
+        "Controls other components"
       ],
       "lambda_examples": [
-        "// Status von anderen: return id(relay1).state;",
-        "// Kombiniert: return id(relay1).state && id(relay2).state;",
-        "// Bedingung: return id(temp).state > 25.0;"
+        "// State from another: return id(relay1).state;",
+        "// Combined: return id(relay1).state && id(relay2).state;",
+        "// Condition: return id(temp).state > 25.0;"
       ]
     }
   }

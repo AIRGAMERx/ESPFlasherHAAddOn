@@ -2,21 +2,55 @@
   "Digitale GPIO Sensoren": {
     "DHT": {
       "platform": "dht",
-      "bus": [ "na" ],
-      "werte": [ "Temperatur", "Luftfeuchtigkeit" ],
-      "required": [ "pin" ],
-      "optional": [ "update_interval", "model" ],
-      "baseconfig": [ "filter", "disabled_by_default" ],
-      "filter": [ "offset", "multiply", "median", "filter_out" ],
-      "disable_by_default": [ "True", "False" ],
+      "bus": [
+        "na"
+      ],
+      "werte": [
+        "Temperature",
+        "Humidity"
+      ],
+      "required": [
+        "pin"
+      ],
+      "optional": [
+        "update_interval",
+        "model"
+      ],
+      "baseconfig": [
+        "filter",
+        "disabled_by_default"
+      ],
+      "filter": [
+        "offset",
+        "multiply",
+        "median",
+        "filter_out"
+      ],
+      "disable_by_default": [
+        "True",
+        "False"
+      ],
       "nested_fields": {
-        "temperature": [ "name", "accuracy_decimals" ],
-        "humidity": [ "name", "accuracy_decimals" ]
+        "temperature": [
+          "name",
+          "accuracy_decimals"
+        ],
+        "humidity": [
+          "name",
+          "accuracy_decimals"
+        ]
       },
       "ui_fields": {
         "pin": {
           "type": "ComboBox",
-          "values": [ "GPIO2", "GPIO4", "GPIO5", "GPIO12", "GPIO13", "GPIO14" ]
+          "values": [
+            "GPIO2",
+            "GPIO4",
+            "GPIO5",
+            "GPIO12",
+            "GPIO13",
+            "GPIO14"
+          ]
         },
         "update_interval": {
           "type": "NumericUpDown",
@@ -26,10 +60,23 @@
         },
         "model": {
           "type": "ComboBox",
-          "values": [ "DHT11", "DHT22", "Auto_Detect", "DHT22_TYPE2", "AM2302", "RHT03", "SI7021", "AM2120" ]
+          "values": [
+            "DHT11",
+            "DHT22",
+            "Auto_Detect",
+            "DHT22_TYPE2",
+            "AM2302",
+            "RHT03",
+            "SI7021",
+            "AM2120"
+          ]
         },
-        "temperature_name": { "type": "TextBox" },
-        "humidity_name": { "type": "TextBox" },
+        "temperature_name": {
+          "type": "TextBox"
+        },
+        "humidity_name": {
+          "type": "TextBox"
+        },
         "temperature_accuracy_decimals": {
           "type": "NumericUpDown",
           "min": 0,
@@ -44,49 +91,105 @@
         }
       }
     },
-
     "DS18B20": {
       "platform": "dallas_temp",
-      "bus": [ "OneWire" ],
-      "werte": [ "Temperatur" ],
-      "required": [ "address" ],
-      "optional": [ "update_interval", "name", "accuracy_decimals", "resolution","id" ],
-      "baseconfig": [ "filter", "disabled_by_default" ],
-      "filter": [ "offset", "multiply", "median", "filter_out", "delta" ],
-      "disable_by_default": [ "True", "False" ],
+      "bus": [
+        "OneWire"
+      ],
+      "werte": [
+        "Temperature"
+      ],
+      "required": [
+        "address"
+      ],
+      "optional": [
+        "update_interval",
+        "name",
+        "accuracy_decimals",
+        "resolution",
+        "id"
+      ],
+      "baseconfig": [
+        "filter",
+        "disabled_by_default"
+      ],
+      "filter": [
+        "offset",
+        "multiply",
+        "median",
+        "filter_out",
+        "delta"
+      ],
+      "disable_by_default": [
+        "True",
+        "False"
+      ],
       "ui_fields": {
-        "address": { "type": "TextBox" },
+        "address": {
+          "type": "TextBox"
+        },
         "update_interval": {
           "type": "NumericUpDown",
           "min": 1,
           "max": 3600,
           "step": 1
         },
-        "name": { "type": "TextBox" },
+        "name": {
+          "type": "TextBox"
+        },
         "accuracy_decimals": {
           "type": "NumericUpDown",
           "min": 0,
           "max": 4,
           "step": 1
         },
-        "id": { "type": "TextBox" },
+        "id": {
+          "type": "TextBox"
+        },
         "resolution": {
           "type": "ComboBox",
-          "values": [ "9", "10", "11", "12" ]
+          "values": [
+            "9",
+            "10",
+            "11",
+            "12"
+          ]
         }
       }
     },
     "MH-Z19": {
       "platform": "mhz19",
-      "bus": [ "uart" ],
-      "werte": [ "CO2 ppm" ],
+      "bus": [
+        "uart"
+      ],
+      "werte": [
+        "CO2 ppm"
+      ],
       "required": [],
-      "optional": [ "name", "update_interval", "automatic_baseline_calibration" ],
-      "baseconfig": [ "filter", "disabled_by_default" ],
-      "filter": [ "offset", "multiply", "median", "filter_out", "sliding_window_moving_average" ],
-      "disable_by_default": [ "True", "False" ],
+      "optional": [
+        "name",
+        "update_interval",
+        "automatic_baseline_calibration"
+      ],
+      "baseconfig": [
+        "filter",
+        "disabled_by_default"
+      ],
+      "filter": [
+        "offset",
+        "multiply",
+        "median",
+        "filter_out",
+        "sliding_window_moving_average"
+      ],
+      "disable_by_default": [
+        "True",
+        "False"
+      ],
       "ui_fields": {
-        "name": { "type": "TextBox" },
+        "name": {
+          "type": "TextBox"
+        },
         "update_interval": {
           "type": "NumericUpDown",
           "min": 1,
@@ -95,40 +198,94 @@
         },
         "automatic_baseline_calibration": {
           "type": "ComboBox",
-          "values": [ "True", "False" ]
+          "values": [
+            "True",
+            "False"
+          ]
         }
       },
-      "info": [ "UART Bus notwendig", "CO2 Messung 400-5000ppm" ]
+      "info": [
+        "UART Bus required",
+        "CO2 measurement 400-5000ppm"
+      ]
     },
     "GPIO_Button": {
       "platform": "gpio",
-      "bus": [ "na" ],
-      "werte": [ "Taster/Button Status" ],
+      "bus": [
+        "na"
+      ],
+      "werte": [
+        "Button Status"
+      ],
       "required": [],
-      "optional": [ "name", "device_class", "filters", "on_press", "on_release", "on_click" ],
-      "baseconfig": [ "disabled_by_default" ],
-      "disable_by_default": [ "True", "False" ],
+      "optional": [
+        "name",
+        "device_class",
+        "filters",
+        "on_press",
+        "on_release",
+        "on_click"
+      ],
+      "baseconfig": [
+        "disabled_by_default"
+      ],
+      "disable_by_default": [
+        "True",
+        "False"
+      ],
       "sensor_class": "binary_sensor",
       "nested_fields": {
-        "pin": [ "number", "mode", "inverted" ]
+        "pin": [
+          "number",
+          "mode",
+          "inverted"
+        ]
       },
       "ui_fields": {
         "pin_number": {
           "type": "ComboBox",
-          "values": [ "GPIO0", "GPIO2", "GPIO4", "GPIO5", "GPIO12", "GPIO13", "GPIO14", "GPIO15", "GPIO16", "GPIO17" ]
+          "values": [
+            "GPIO0",
+            "GPIO2",
+            "GPIO4",
+            "GPIO5",
+            "GPIO12",
+            "GPIO13",
+            "GPIO14",
+            "GPIO15",
+            "GPIO16",
+            "GPIO17"
+          ]
         },
         "pin_mode": {
           "type": "ComboBox",
-          "values": [ "INPUT_PULLUP", "INPUT_PULLDOWN", "INPUT" ]
+          "values": [
+            "INPUT_PULLUP",
+            "INPUT_PULLDOWN",
+            "INPUT"
+          ]
         },
-        "name": { "type": "TextBox" },
+        "name": {
+          "type": "TextBox"
+        },
         "device_class": {
           "type": "ComboBox",
-          "values": [ "door", "window", "garage_door", "opening", "motion", "occupancy", "presence" ]
+          "values": [
+            "door",
+            "window",
+            "garage_door",
+            "opening",
+            "motion",
+            "occupancy",
+            "presence"
+          ]
         },
         "pin_inverted": {
           "type": "ComboBox",
-          "values": [ "True", "False" ]
+          "values": [
+            "True",
+            "False"
+          ]
         },
         "filters": {
           "type": "TextBox",
@@ -151,28 +308,71 @@
           "placeholder": "- min_length: 50ms\n  max_length: 1s\n  then:\n    - logger.log: \"Short click\""
         }
       },
-      "info": [ "GPIO Pin erforderlich", "Pullup automatisch aktiviert", "Für Taster und Buttons" ]
+      "info": [
+        "GPIO Pin required",
+        "Pullup activated automatically",
+        "For Buttons"
+      ]
     },
-
     "Rotary_Encoder": {
       "platform": "rotary_encoder",
-      "bus": [ "na" ],
-      "werte": [ "Position", "Drehrichtung" ],
-      "required": [ "pin_a", "pin_b" ],
-      "optional": [ "name", "min_value", "max_value", "resolution" ],
-      "baseconfig": [ "filter", "disabled_by_default" ],
-      "filter": [ "offset", "multiply", "median", "filter_out" ],
-      "disable_by_default": [ "True", "False" ],
+      "bus": [
+        "na"
+      ],
+      "werte": [
+        "Position",
+        "Drehrichtung"
+      ],
+      "required": [
+        "pin_a",
+        "pin_b"
+      ],
+      "optional": [
+        "name",
+        "min_value",
+        "max_value",
+        "resolution"
+      ],
+      "baseconfig": [
+        "filter",
+        "disabled_by_default"
+      ],
+      "filter": [
+        "offset",
+        "multiply",
+        "median",
+        "filter_out"
+      ],
+      "disable_by_default": [
+        "True",
+        "False"
+      ],
       "ui_fields": {
         "pin_a": {
           "type": "ComboBox",
-          "values": [ "GPIO2", "GPIO4", "GPIO5", "GPIO12", "GPIO13", "GPIO14" ]
+          "values": [
+            "GPIO2",
+            "GPIO4",
+            "GPIO5",
+            "GPIO12",
+            "GPIO13",
+            "GPIO14"
+          ]
         },
         "pin_b": {
           "type": "ComboBox",
-          "values": [ "GPIO2", "GPIO4", "GPIO5", "GPIO12", "GPIO13", "GPIO14" ]
+          "values": [
+            "GPIO2",
+            "GPIO4",
+            "GPIO5",
+            "GPIO12",
+            "GPIO13",
+            "GPIO14"
+          ]
         },
-        "name": { "type": "TextBox" },
+        "name": {
+          "type": "TextBox"
+        },
         "min_value": {
           "type": "NumericUpDown",
           "min": -1000,
@@ -187,54 +387,130 @@
         },
         "resolution": {
           "type": "ComboBox",
-          "values": [ "1", "2", "4" ]
+          "values": [
+            "1",
+            "2",
+            "4"
+          ]
         }
       },
-      "info": [ "Zwei GPIO Pins erforderlich", "Für Drehgeber/Potentiometer" ]
+      "info": [
+        "Two GPIO Pins required",
+        "For encoders/potentiometers"
+      ]
     },
     "Reed_Switch": {
       "platform": "gpio",
-      "bus": [ "na" ],
-      "werte": [ "Tür/Fenster Status" ],
-      "required": [ "pin" ],
-      "optional": [ "name", "device_class", "inverted" ],
-      "baseconfig": [ "disabled_by_default" ],
-      "disable_by_default": [ "True", "False" ],
+      "bus": [
+        "na"
+      ],
+      "werte": [
+        "Door/Window status"
+      ],
+      "required": [
+        "pin"
+      ],
+      "optional": [
+        "name",
+        "device_class",
+        "inverted"
+      ],
+      "baseconfig": [
+        "disabled_by_default"
+      ],
+      "disable_by_default": [
+        "True",
+        "False"
+      ],
       "ui_fields": {
         "pin": {
           "type": "ComboBox",
-          "values": [ "GPIO2", "GPIO4", "GPIO5", "GPIO12", "GPIO13", "GPIO14" ]
+          "values": [
+            "GPIO2",
+            "GPIO4",
+            "GPIO5",
+            "GPIO12",
+            "GPIO13",
+            "GPIO14"
+          ]
         },
-        "name": { "type": "TextBox" },
+        "name": {
+          "type": "TextBox"
+        },
         "device_class": {
           "type": "ComboBox",
-          "values": [ "door", "window", "garage_door", "opening" ]
+          "values": [
+            "door",
+            "window",
+            "garage_door",
+            "opening"
+          ]
         },
         "inverted": {
           "type": "ComboBox",
-          "values": [ "True", "False" ]
+          "values": [
+            "True",
+            "False"
+          ]
         }
       },
-      "info": [ "Binary Sensor", "Magnetschalter für Türen/Fenster" ]
+      "info": [
+        "Binary Sensor",
+        "Magnetic switch for doors/windows"
+      ]
     },
     "PMS5003": {
       "platform": "pmsx003",
-      "bus": [ "uart" ],
-      "werte": [ "PM1.0", "PM2.5", "PM10" ],
+      "bus": [
+        "uart"
+      ],
+      "werte": [
+        "PM1.0",
+        "PM2.5",
+        "PM10"
+      ],
       "required": [],
-      "optional": [ "type", "update_interval" ],
-      "baseconfig": [ "filter", "disabled_by_default" ],
-      "filter": [ "offset", "multiply", "median", "filter_out", "sliding_window_moving_average" ],
-      "disable_by_default": [ "True", "False" ],
+      "optional": [
+        "type",
+        "update_interval"
+      ],
+      "baseconfig": [
+        "filter",
+        "disabled_by_default"
+      ],
+      "filter": [
+        "offset",
+        "multiply",
+        "median",
+        "filter_out",
+        "sliding_window_moving_average"
+      ],
+      "disable_by_default": [
+        "True",
+        "False"
+      ],
       "nested_fields": {
-        "pm_1_0": [ "name", "accuracy_decimals" ],
-        "pm_2_5": [ "name", "accuracy_decimals" ],
-        "pm_10_0": [ "name", "accuracy_decimals" ]
+        "pm_1_0": [
+          "name",
+          "accuracy_decimals"
+        ],
+        "pm_2_5": [
+          "name",
+          "accuracy_decimals"
+        ],
+        "pm_10_0": [
+          "name",
+          "accuracy_decimals"
+        ]
       },
       "ui_fields": {
         "type": {
           "type": "ComboBox",
-          "values": [ "PMSX003", "PMS5003T", "PMS5003ST" ]
+          "values": [
+            "PMSX003",
+            "PMS5003T",
+            "PMS5003ST"
+          ]
         },
         "update_interval": {
           "type": "NumericUpDown",
@@ -242,35 +518,85 @@
           "max": 3600,
           "step": 1
         },
-        "pm_1_0_name": { "type": "TextBox" },
-        "pm_2_5_name": { "type": "TextBox" },
-        "pm_10_0_name": { "type": "TextBox" }
+        "pm_1_0_name": {
+          "type": "TextBox"
+        },
+        "pm_2_5_name": {
+          "type": "TextBox"
+        },
+        "pm_10_0_name": {
+          "type": "TextBox"
+        }
       },
-      "info": [ "UART Bus notwendig", "Feinstaubmessung" ]
+      "info": [
+        "UART Bus required",
+        "Fine dust measurement"
+      ]
     },
-
     "HC-SR04": {
       "platform": "ultrasonic",
       "bus": [],
-      "werte": [ "Abstand" ],
-      "required": [ "trigger_pin", "echo_pin" ],
-      "optional": [ "name", "timeout", "update_interval", "pulse_time", "id" ],
-      "baseconfig": [ "filter", "disabled_by_default" ],
-      "filter": [ "offset", "multiply", "median", "filter_out", "sliding_window_moving_average" ],
-      "disable_by_default": [ "True", "False" ],
+      "werte": [
+        "Distance"
+      ],
+      "required": [
+        "trigger_pin",
+        "echo_pin"
+      ],
+      "optional": [
+        "name",
+        "timeout",
+        "update_interval",
+        "pulse_time",
+        "id"
+      ],
+      "baseconfig": [
+        "filter",
+        "disabled_by_default"
+      ],
+      "filter": [
+        "offset",
+        "multiply",
+        "median",
+        "filter_out",
+        "sliding_window_moving_average"
+      ],
+      "disable_by_default": [
+        "True",
+        "False"
+      ],
       "nested_fields": {
-        "distance": [ "name", "accuracy_decimals" ]
+        "distance": [
+          "name",
+          "accuracy_decimals"
+        ]
       },
       "ui_fields": {
         "trigger_pin": {
           "type": "ComboBox",
-          "values": [ "GPIO2", "GPIO4", "GPIO5", "GPIO12", "GPIO13", "GPIO14" ]
+          "values": [
+            "GPIO2",
+            "GPIO4",
+            "GPIO5",
+            "GPIO12",
+            "GPIO13",
+            "GPIO14"
+          ]
         },
         "echo_pin": {
           "type": "ComboBox",
-          "values": [ "GPIO2", "GPIO4", "GPIO5", "GPIO12", "GPIO13", "GPIO14" ]
+          "values": [
+            "GPIO2",
+            "GPIO4",
+            "GPIO5",
+            "GPIO12",
+            "GPIO13",
+            "GPIO14"
+          ]
         },
-        "name": { "type": "TextBox" },
+        "name": {
+          "type": "TextBox"
+        },
         "timeout": {
           "type": "NumericUpDown",
           "min": 1,
@@ -289,8 +615,12 @@
           "max": 1000,
           "step": 10
         },
-        "id": { "type": "TextBox" },
-        "distance_name": { "type": "TextBox" },
+        "id": {
+          "type": "TextBox"
+        },
+        "distance_name": {
+          "type": "TextBox"
+        },
         "distance_accuracy_decimals": {
           "type": "NumericUpDown",
           "min": 0,
@@ -299,52 +629,114 @@
         }
       }
     },
-
     "PIR": {
       "platform": "gpio",
-      "bus": [ "na" ],
-      "werte": [ "Bewegung" ],
-      "required": [ "pin" ],
-      "optional": [ "name", "device_class", "inverted" ],
-      "baseconfig": [ "disabled_by_default" ],
-      "disable_by_default": [ "True", "False" ],
+      "bus": [
+        "na"
+      ],
+      "werte": [
+        "Motion"
+      ],
+      "required": [
+        "pin"
+      ],
+      "optional": [
+        "name",
+        "device_class",
+        "inverted"
+      ],
+      "baseconfig": [
+        "disabled_by_default"
+      ],
+      "disable_by_default": [
+        "True",
+        "False"
+      ],
       "ui_fields": {
         "pin": {
           "type": "ComboBox",
-          "values": [ "GPIO2", "GPIO4", "GPIO5", "GPIO12", "GPIO13", "GPIO14" ]
+          "values": [
+            "GPIO2",
+            "GPIO4",
+            "GPIO5",
+            "GPIO12",
+            "GPIO13",
+            "GPIO14"
+          ]
         },
-        "name": { "type": "TextBox" },
+        "name": {
+          "type": "TextBox"
+        },
         "device_class": {
           "type": "ComboBox",
-          "values": [ "motion", "occupancy" ]
+          "values": [
+            "motion",
+            "occupancy"
+          ]
         },
         "inverted": {
           "type": "ComboBox",
-          "values": [ "True", "False" ]
+          "values": [
+            "True",
+            "False"
+          ]
         }
       }
     }
   },
-
-
   "I2C Sensoren": {
     "BMP280": {
       "platform": "bmp280_i2c",
-      "bus": [ "i2c" ],
-      "werte": [ "Temperatur", "Luftdruck" ],
-      "required": [ "address" ],
-      "optional": [ "update_interval", "iir_filter" ],
-      "baseconfig": [ "filter", "disabled_by_default" ],
-      "filter": [ "offset", "multiply", "median", "filter_out", "calibrate_linear", "calibrate_polynomial", "sliding_window_moving_average" ],
-      "disable_by_default": [ "True", "False" ],
+      "bus": [
+        "i2c"
+      ],
+      "werte": [
+        "Temperature",
+        "Air pressure"
+      ],
+      "required": [
+        "address"
+      ],
+      "optional": [
+        "update_interval",
+        "iir_filter"
+      ],
+      "baseconfig": [
+        "filter",
+        "disabled_by_default"
+      ],
+      "filter": [
+        "offset",
+        "multiply",
+        "median",
+        "filter_out",
+        "calibrate_linear",
+        "calibrate_polynomial",
+        "sliding_window_moving_average"
+      ],
+      "disable_by_default": [
+        "True",
+        "False"
+      ],
       "nested_fields": {
-        "temperature": [ "name", "oversampling", "accuracy_decimals" ],
-        "pressure": [ "name", "oversampling", "accuracy_decimals" ]
+        "temperature": [
+          "name",
+          "oversampling",
+          "accuracy_decimals"
+        ],
+        "pressure": [
+          "name",
+          "oversampling",
+          "accuracy_decimals"
+        ]
       },
       "ui_fields": {
         "address": {
           "type": "ComboBox",
-          "values": [ "0x76", "0x77" ]
+          "values": [
+            "0x76",
+            "0x77"
+          ]
         },
         "update_interval": {
           "type": "NumericUpDown",
@@ -354,12 +746,26 @@
         },
         "iir_filter": {
           "type": "ComboBox",
-          "values": [ "OFF", "2x", "4x", "8x", "16x" ]
+          "values": [
+            "OFF",
+            "2x",
+            "4x",
+            "8x",
+            "16x"
+          ]
         },
-        "temperature_name": { "type": "TextBox" },
+        "temperature_name": {
+          "type": "TextBox"
+        },
         "temperature_oversampling": {
           "type": "ComboBox",
-          "values": [ "1x", "2x", "4x", "8x", "16x" ]
+          "values": [
+            "1x",
+            "2x",
+            "4x",
+            "8x",
+            "16x"
+          ]
         },
         "temperature_accuracy_decimals": {
           "type": "NumericUpDown",
@@ -367,10 +773,18 @@
           "max": 4,
           "step": 1
         },
-        "pressure_name": { "type": "TextBox" },
+        "pressure_name": {
+          "type": "TextBox"
+        },
         "pressure_oversampling": {
           "type": "ComboBox",
-          "values": [ "1x", "2x", "4x", "8x", "16x" ]
+          "values": [
+            "1x",
+            "2x",
+            "4x",
+            "8x",
+            "16x"
+          ]
         },
         "pressure_accuracy_decimals": {
           "type": "NumericUpDown",
@@ -379,29 +793,76 @@
           "step": 1
         }
       },
-      "info": [ "I2C Bus notwendig" ]
+      "info": [
+        "I2C Bus required"
+      ]
     },
     "BME680": {
       "platform": "bme680_bsec",
-      "bus": [ "i2c" ],
-      "werte": [ "Temperatur", "Luftfeuchtigkeit", "Luftdruck", "Luftqualität IAQ" ],
-      "required": [ "address" ],
-      "optional": [ "update_interval", "temperature_offset" ],
-      "baseconfig": [ "filter", "disabled_by_default" ],
-      "filter": [ "offset", "multiply", "median", "filter_out", "calibrate_linear" ],
-      "disable_by_default": [ "True", "False" ],
+      "bus": [
+        "i2c"
+      ],
+      "werte": [
+        "Temperature",
+        "Humidity",
+        "Air pressure",
+        "Air quality IAQ"
+      ],
+      "required": [
+        "address"
+      ],
+      "optional": [
+        "update_interval",
+        "temperature_offset"
+      ],
+      "baseconfig": [
+        "filter",
+        "disabled_by_default"
+      ],
+      "filter": [
+        "offset",
+        "multiply",
+        "median",
+        "filter_out",
+        "calibrate_linear"
+      ],
+      "disable_by_default": [
+        "True",
+        "False"
+      ],
       "nested_fields": {
-        "temperature": [ "name", "accuracy_decimals" ],
-        "humidity": [ "name", "accuracy_decimals" ],
-        "pressure": [ "name", "accuracy_decimals" ],
-        "iaq": [ "name", "accuracy_decimals" ],
-        "co2_equivalent": [ "name", "accuracy_decimals" ],
-        "breath_voc_equivalent": [ "name", "accuracy_decimals" ]
+        "temperature": [
+          "name",
+          "accuracy_decimals"
+        ],
+        "humidity": [
+          "name",
+          "accuracy_decimals"
+        ],
+        "pressure": [
+          "name",
+          "accuracy_decimals"
+        ],
+        "iaq": [
+          "name",
+          "accuracy_decimals"
+        ],
+        "co2_equivalent": [
+          "name",
+          "accuracy_decimals"
+        ],
+        "breath_voc_equivalent": [
+          "name",
+          "accuracy_decimals"
+        ]
       },
       "ui_fields": {
         "address": {
           "type": "ComboBox",
-          "values": [ "0x76", "0x77" ]
+          "values": [
+            "0x76",
+            "0x77"
+          ]
         },
         "update_interval": {
           "type": "NumericUpDown",
@@ -415,34 +876,88 @@
           "max": 10,
           "step": 0.1
         },
-        "temperature_name": { "type": "TextBox" },
-        "humidity_name": { "type": "TextBox" },
-        "pressure_name": { "type": "TextBox" },
-        "iaq_name": { "type": "TextBox" },
-        "co2_equivalent_name": { "type": "TextBox" },
-        "breath_voc_equivalent_name": { "type": "TextBox" }
+        "temperature_name": {
+          "type": "TextBox"
+        },
+        "humidity_name": {
+          "type": "TextBox"
+        },
+        "pressure_name": {
+          "type": "TextBox"
+        },
+        "iaq_name": {
+          "type": "TextBox"
+        },
+        "co2_equivalent_name": {
+          "type": "TextBox"
+        },
+        "breath_voc_equivalent_name": {
+          "type": "TextBox"
+        }
       },
-      "info": [ "I2C Bus notwendig", "Bosch BSEC Library" ]
+      "info": [
+        "I2C Bus required",
+        "Bosch BSEC Library"
+      ]
     },
-
     "BME280": {
       "platform": "bme280_i2c",
-      "werte": [ "Temperatur", "Luftfeuchtigkeit", "Luftdruck" ],
-      "bus": [ "i2c" ],
-      "required": [ "address" ],
-      "optional": [ "update_interval", "iir_filter" ],
-      "baseconfig": [ "filter", "disabled_by_default" ],
-      "filter": [ "offset", "multiply", "median", "filter_out", "calibrate_linear", "calibrate_polynomial", "sliding_window_moving_average" ],
-      "disable_by_default": [ "True", "False" ],
+      "werte": [
+        "Temperature",
+        "Humidity",
+        "Air pressure"
+      ],
+      "bus": [
+        "i2c"
+      ],
+      "required": [
+        "address"
+      ],
+      "optional": [
+        "update_interval",
+        "iir_filter"
+      ],
+      "baseconfig": [
+        "filter",
+        "disabled_by_default"
+      ],
+      "filter": [
+        "offset",
+        "multiply",
+        "median",
+        "filter_out",
+        "calibrate_linear",
+        "calibrate_polynomial",
+        "sliding_window_moving_average"
+      ],
+      "disable_by_default": [
+        "True",
+        "False"
+      ],
       "nested_fields": {
-        "temperature": [ "name", "oversampling", "accuracy_decimals" ],
-        "humidity": [ "name", "oversampling", "accuracy_decimals" ],
-        "pressure": [ "name", "oversampling", "accuracy_decimals" ]
+        "temperature": [
+          "name",
+          "oversampling",
+          "accuracy_decimals"
+        ],
+        "humidity": [
+          "name",
+          "oversampling",
+          "accuracy_decimals"
+        ],
+        "pressure": [
+          "name",
+          "oversampling",
+          "accuracy_decimals"
+        ]
       },
       "ui_fields": {
         "address": {
           "type": "ComboBox",
-          "values": [ "0x76", "0x77" ]
+          "values": [
+            "0x76",
+            "0x77"
+          ]
         },
         "update_interval": {
           "type": "NumericUpDown",
@@ -452,12 +967,26 @@
         },
         "iir_filter": {
           "type": "ComboBox",
-          "values": [ "OFF", "2x", "4x", "8x", "16x" ]
+          "values": [
+            "OFF",
+            "2x",
+            "4x",
+            "8x",
+            "16x"
+          ]
         },
-        "temperature_name": { "type": "TextBox" },
+        "temperature_name": {
+          "type": "TextBox"
+        },
         "temperature_oversampling": {
           "type": "ComboBox",
-          "values": [ "1x", "2x", "4x", "8x", "16x" ]
+          "values": [
+            "1x",
+            "2x",
+            "4x",
+            "8x",
+            "16x"
+          ]
         },
         "temperature_accuracy_decimals": {
           "type": "NumericUpDown",
@@ -465,10 +994,18 @@
           "max": 4,
           "step": 1
         },
-        "humidity_name": { "type": "TextBox" },
+        "humidity_name": {
+          "type": "TextBox"
+        },
         "humidity_oversampling": {
           "type": "ComboBox",
-          "values": [ "1x", "2x", "4x", "8x", "16x" ]
+          "values": [
+            "1x",
+            "2x",
+            "4x",
+            "8x",
+            "16x"
+          ]
         },
         "humidity_accuracy_decimals": {
           "type": "NumericUpDown",
@@ -476,10 +1013,18 @@
           "max": 4,
           "step": 1
         },
-        "pressure_name": { "type": "TextBox" },
+        "pressure_name": {
+          "type": "TextBox"
+        },
         "pressure_oversampling": {
           "type": "ComboBox",
-          "values": [ "1x", "2x", "4x", "8x", "16x" ]
+          "values": [
+            "1x",
+            "2x",
+            "4x",
+            "8x",
+            "16x"
+          ]
         },
         "pressure_accuracy_decimals": {
           "type": "NumericUpDown",
@@ -488,24 +1033,52 @@
           "step": 1
         }
       },
-      "info": [ "I2C Bus notwendig" ]
+      "info": [
+        "I2C Bus required"
+      ]
     },
-
     "BH1750": {
       "platform": "bh1750",
-      "werte": [ "Helligkeit (Lux)" ],
-      "bus": [ "i2c" ],
-      "required": [ "address" ],
-      "optional": [ "name", "update_interval", "measurement_duration" ],
-      "baseconfig": [ "filter", "disabled_by_default" ],
-      "filter": [ "offset", "multiply", "median", "filter_out", "calibrate_linear" ],
-      "disable_by_default": [ "True", "False" ],
+      "werte": [
+        "Brightness (Lux)"
+      ],
+      "bus": [
+        "i2c"
+      ],
+      "required": [
+        "address"
+      ],
+      "optional": [
+        "name",
+        "update_interval",
+        "measurement_duration"
+      ],
+      "baseconfig": [
+        "filter",
+        "disabled_by_default"
+      ],
+      "filter": [
+        "offset",
+        "multiply",
+        "median",
+        "filter_out",
+        "calibrate_linear"
+      ],
+      "disable_by_default": [
+        "True",
+        "False"
+      ],
       "ui_fields": {
         "address": {
           "type": "ComboBox",
-          "values": [ "0x23", "0x5C" ]
+          "values": [
+            "0x23",
+            "0x5C"
+          ]
         },
-        "name": { "type": "TextBox" },
+        "name": {
+          "type": "TextBox"
+        },
         "update_interval": {
           "type": "NumericUpDown",
           "min": 1,
@@ -519,24 +1092,56 @@
           "step": 1
         }
       },
-      "info": [ "I2C Bus notwendig" ]
+      "info": [
+        "I2C Bus required"
+      ]
     },
     "ADS1115": {
       "platform": "ads1115",
-      "bus": [ "i2c" ],
-      "werte": [ "Präzise Analogwerte" ],
-      "required": [ "address" ],
-      "optional": [ "update_interval" ],
-      "baseconfig": [ "filter", "disabled_by_default" ],
-      "filter": [ "offset", "multiply", "median", "filter_out", "calibrate_linear" ],
-      "disable_by_default": [ "True", "False" ],
+      "bus": [
+        "i2c"
+      ],
+      "werte": [
+        "Präzise Analogwerte"
+      ],
+      "required": [
+        "address"
+      ],
+      "optional": [
+        "update_interval"
+      ],
+      "baseconfig": [
+        "filter",
+        "disabled_by_default"
+      ],
+      "filter": [
+        "offset",
+        "multiply",
+        "median",
+        "filter_out",
+        "calibrate_linear"
+      ],
+      "disable_by_default": [
+        "True",
+        "False"
+      ],
       "nested_fields": {
-        "sensor": [ "pin", "gain", "name", "accuracy_decimals" ]
+        "sensor": [
+          "pin",
+          "gain",
+          "name",
+          "accuracy_decimals"
+        ]
       },
       "ui_fields": {
         "address": {
           "type": "ComboBox",
-          "values": [ "0x48", "0x49", "0x4A", "0x4B" ]
+          "values": [
+            "0x48",
+            "0x49",
+            "0x4A",
+            "0x4B"
+          ]
         },
         "update_interval": {
           "type": "NumericUpDown",
@@ -546,34 +1151,82 @@
         },
         "sensor_pin": {
           "type": "ComboBox",
-          "values": [ "A0", "A1", "A2", "A3" ]
+          "values": [
+            "A0",
+            "A1",
+            "A2",
+            "A3"
+          ]
         },
         "sensor_gain": {
           "type": "ComboBox",
-          "values": [ "6.144", "4.096", "2.048", "1.024", "0.512", "0.256" ]
+          "values": [
+            "6.144",
+            "4.096",
+            "2.048",
+            "1.024",
+            "0.512",
+            "0.256"
+          ]
         },
-        "sensor_name": { "type": "TextBox" }
+        "sensor_name": {
+          "type": "TextBox"
+        }
       },
-      "info": [ "I2C Bus notwendig", "16-bit Auflösung" ]
+      "info": [
+        "I2C Bus required",
+        "16-bit resolution"
+      ]
     },
-
     "SHT3X-D": {
       "platform": "sht3xd",
-      "werte": [ "Temperatur", "Luftfeuchtigkeit" ],
-      "bus": [ "i2c" ],
-      "required": [ "address" ],
-      "optional": [ "update_interval", "repeatability", "speed" ],
-      "baseconfig": [ "filter", "disabled_by_default" ],
-      "filter": [ "offset", "multiply", "median", "filter_out", "calibrate_linear" ],
-      "disable_by_default": [ "True", "False" ],
+      "werte": [
+        "Temperature",
+        "Humidity"
+      ],
+      "bus": [
+        "i2c"
+      ],
+      "required": [
+        "address"
+      ],
+      "optional": [
+        "update_interval",
+        "repeatability",
+        "speed"
+      ],
+      "baseconfig": [
+        "filter",
+        "disabled_by_default"
+      ],
+      "filter": [
+        "offset",
+        "multiply",
+        "median",
+        "filter_out",
+        "calibrate_linear"
+      ],
+      "disable_by_default": [
+        "True",
+        "False"
+      ],
       "nested_fields": {
-        "temperature": [ "name", "accuracy_decimals" ],
-        "humidity": [ "name", "accuracy_decimals" ]
+        "temperature": [
+          "name",
+          "accuracy_decimals"
+        ],
+        "humidity": [
+          "name",
+          "accuracy_decimals"
+        ]
       },
       "ui_fields": {
         "address": {
           "type": "ComboBox",
-          "values": [ "0x44", "0x45" ]
+          "values": [
+            "0x44",
+            "0x45"
+          ]
         },
         "update_interval": {
           "type": "NumericUpDown",
@@ -583,14 +1236,26 @@
         },
         "repeatability": {
           "type": "ComboBox",
-          "values": [ "HIGH", "MEDIUM", "LOW" ]
+          "values": [
+            "HIGH",
+            "MEDIUM",
+            "LOW"
+          ]
         },
         "speed": {
           "type": "ComboBox",
-          "values": [ "HIGH", "MEDIUM", "LOW" ]
+          "values": [
+            "HIGH",
+            "MEDIUM",
+            "LOW"
+          ]
         },
-        "temperature_name": { "type": "TextBox" },
-        "humidity_name": { "type": "TextBox" },
+        "temperature_name": {
+          "type": "TextBox"
+        },
+        "humidity_name": {
+          "type": "TextBox"
+        },
         "temperature_accuracy_decimals": {
           "type": "NumericUpDown",
           "min": 0,
@@ -604,25 +1269,60 @@
           "step": 1
         }
       },
-      "info": [ "I2C Bus notwendig" ]
+      "info": [
+        "I2C Bus required"
+      ]
     },
     "CCS811": {
       "platform": "ccs811",
-      "bus": [ "i2c" ],
-      "werte": [ "CO2 ppm", "TVOC ppb" ],
-      "required": [ "address" ],
-      "optional": [ "update_interval", "baseline", "temperature", "humidity" ],
-      "baseconfig": [ "filter", "disabled_by_default" ],
-      "filter": [ "offset", "multiply", "median", "filter_out", "sliding_window_moving_average" ],
-      "disable_by_default": [ "True", "False" ],
+      "bus": [
+        "i2c"
+      ],
+      "werte": [
+        "CO2 ppm",
+        "TVOC ppb"
+      ],
+      "required": [
+        "address"
+      ],
+      "optional": [
+        "update_interval",
+        "baseline",
+        "temperature",
+        "humidity"
+      ],
+      "baseconfig": [
+        "filter",
+        "disabled_by_default"
+      ],
+      "filter": [
+        "offset",
+        "multiply",
+        "median",
+        "filter_out",
+        "sliding_window_moving_average"
+      ],
+      "disable_by_default": [
+        "True",
+        "False"
+      ],
       "nested_fields": {
-        "eco2": [ "name", "accuracy_decimals" ],
-        "tvoc": [ "name", "accuracy_decimals" ]
+        "eco2": [
+          "name",
+          "accuracy_decimals"
+        ],
+        "tvoc": [
+          "name",
+          "accuracy_decimals"
+        ]
       },
       "ui_fields": {
         "address": {
           "type": "ComboBox",
-          "values": [ "0x5A", "0x5B" ]
+          "values": [
+            "0x5A",
+            "0x5B"
+          ]
         },
         "update_interval": {
           "type": "NumericUpDown",
@@ -630,36 +1330,94 @@
           "max": 3600,
           "step": 1
         },
-        "baseline": { "type": "TextBox" },
-        "temperature": { "type": "TextBox" },
-        "humidity": { "type": "TextBox" },
-        "eco2_name": { "type": "TextBox" },
-        "tvoc_name": { "type": "TextBox" }
+        "baseline": {
+          "type": "TextBox"
+        },
+        "temperature": {
+          "type": "TextBox"
+        },
+        "humidity": {
+          "type": "TextBox"
+        },
+        "eco2_name": {
+          "type": "TextBox"
+        },
+        "tvoc_name": {
+          "type": "TextBox"
+        }
       },
-      "info": [ "I2C Bus notwendig", "Günstige Luftqualitätsmessung" ]
+      "info": [
+        "I2C Bus required",
+        "Cheap Air quality measurement"
+      ]
     },
     "MPU6050": {
       "platform": "mpu6050",
-      "bus": [ "i2c" ],
-      "werte": [ "Beschleunigung", "Rotation", "Temperatur" ],
-      "required": [ "address" ],
-      "optional": [ "update_interval" ],
-      "baseconfig": [ "filter", "disabled_by_default" ],
-      "filter": [ "offset", "multiply", "median", "filter_out" ],
-      "disable_by_default": [ "True", "False" ],
+      "bus": [
+        "i2c"
+      ],
+      "werte": [
+        "Beschleunigung",
+        "Rotation",
+        "Temperatur"
+      ],
+      "required": [
+        "address"
+      ],
+      "optional": [
+        "update_interval"
+      ],
+      "baseconfig": [
+        "filter",
+        "disabled_by_default"
+      ],
+      "filter": [
+        "offset",
+        "multiply",
+        "median",
+        "filter_out"
+      ],
+      "disable_by_default": [
+        "True",
+        "False"
+      ],
       "nested_fields": {
-        "accel_x": [ "name", "accuracy_decimals" ],
-        "accel_y": [ "name", "accuracy_decimals" ],
-        "accel_z": [ "name", "accuracy_decimals" ],
-        "gyro_x": [ "name", "accuracy_decimals" ],
-        "gyro_y": [ "name", "accuracy_decimals" ],
-        "gyro_z": [ "name", "accuracy_decimals" ],
-        "temperature": [ "name", "accuracy_decimals" ]
+        "accel_x": [
+          "name",
+          "accuracy_decimals"
+        ],
+        "accel_y": [
+          "name",
+          "accuracy_decimals"
+        ],
+        "accel_z": [
+          "name",
+          "accuracy_decimals"
+        ],
+        "gyro_x": [
+          "name",
+          "accuracy_decimals"
+        ],
+        "gyro_y": [
+          "name",
+          "accuracy_decimals"
+        ],
+        "gyro_z": [
+          "name",
+          "accuracy_decimals"
+        ],
+        "temperature": [
+          "name",
+          "accuracy_decimals"
+        ]
       },
       "ui_fields": {
         "address": {
           "type": "ComboBox",
-          "values": [ "0x68", "0x69" ]
+          "values": [
+            "0x68",
+            "0x69"
+          ]
         },
         "update_interval": {
           "type": "NumericUpDown",
@@ -667,31 +1425,77 @@
           "max": 3600,
           "step": 1
         },
-        "accel_x_name": { "type": "TextBox" },
-        "accel_y_name": { "type": "TextBox" },
-        "accel_z_name": { "type": "TextBox" },
-        "gyro_x_name": { "type": "TextBox" },
-        "gyro_y_name": { "type": "TextBox" },
-        "gyro_z_name": { "type": "TextBox" },
-        "temperature_name": { "type": "TextBox" }
+        "accel_x_name": {
+          "type": "TextBox"
+        },
+        "accel_y_name": {
+          "type": "TextBox"
+        },
+        "accel_z_name": {
+          "type": "TextBox"
+        },
+        "gyro_x_name": {
+          "type": "TextBox"
+        },
+        "gyro_y_name": {
+          "type": "TextBox"
+        },
+        "gyro_z_name": {
+          "type": "TextBox"
+        },
+        "temperature_name": {
+          "type": "TextBox"
+        }
       },
-      "info": [ "I2C Bus notwendig", "6-Achsen Bewegungssensor" ]
+      "info": [
+        "I2C Bus required",
+        "6-Axis Motion sensor"
+      ]
     },
     "TSL2561": {
       "platform": "tsl2561",
-      "bus": [ "i2c" ],
-      "werte": [ "Helligkeit (Lux)" ],
-      "required": [ "address" ],
-      "optional": [ "name", "update_interval", "integration_time", "gain" ],
-      "baseconfig": [ "filter", "disabled_by_default" ],
-      "filter": [ "offset", "multiply", "median", "filter_out", "calibrate_linear" ],
-      "disable_by_default": [ "True", "False" ],
+      "bus": [
+        "i2c"
+      ],
+      "werte": [
+        "Brightness (Lux)"
+      ],
+      "required": [
+        "address"
+      ],
+      "optional": [
+        "name",
+        "update_interval",
+        "integration_time",
+        "gain"
+      ],
+      "baseconfig": [
+        "filter",
+        "disabled_by_default"
+      ],
+      "filter": [
+        "offset",
+        "multiply",
+        "median",
+        "filter_out",
+        "calibrate_linear"
+      ],
+      "disable_by_default": [
+        "True",
+        "False"
+      ],
       "ui_fields": {
         "address": {
           "type": "ComboBox",
-          "values": [ "0x29", "0x39", "0x49" ]
+          "values": [
+            "0x29",
+            "0x39",
+            "0x49"
+          ]
         },
-        "name": { "type": "TextBox" },
+        "name": {
+          "type": "TextBox"
+        },
         "update_interval": {
           "type": "NumericUpDown",
           "min": 1,
@@ -700,40 +1504,86 @@
         },
         "integration_time": {
           "type": "ComboBox",
-          "values": [ "14ms", "101ms", "402ms" ]
+          "values": [
+            "14ms",
+            "101ms",
+            "402ms"
+          ]
         },
         "gain": {
           "type": "ComboBox",
-          "values": [ "1x", "16x" ]
+          "values": [
+            "1x",
+            "16x"
+          ]
         }
       },
-      "info": [ "I2C Bus notwendig", "Alternative zu BH1750" ]
+      "info": [
+        "I2C Bus required",
+        "alternate to BH1750"
+      ]
     },
-
     "INA219": {
       "platform": "ina219",
-      "werte": [ "Spannung", "Strom", "Leistung" ],
-      "bus": [ "i2c" ],
-      "required": [ "address" ],
+      "werte": [
+        "Voltage",
+        "Current",
+        "Power"
+      ],
+      "bus": [
+        "i2c"
+      ],
+      "required": [
+        "address"
+      ],
       "optional": [
         "shunt_resistance",
         "max_voltage",
         "max_current",
         "update_interval"
       ],
-      "baseconfig": [ "filter", "disabled_by_default" ],
-      "filter": [ "offset", "multiply", "median", "filter_out", "calibrate_linear" ],
-      "disable_by_default": [ "True", "False" ],
+      "baseconfig": [
+        "filter",
+        "disabled_by_default"
+      ],
+      "filter": [
+        "offset",
+        "multiply",
+        "median",
+        "filter_out",
+        "calibrate_linear"
+      ],
+      "disable_by_default": [
+        "True",
+        "False"
+      ],
       "nested_fields": {
-        "current": [ "name", "accuracy_decimals" ],
-        "power": [ "name", "accuracy_decimals" ],
-        "bus_voltage": [ "name", "accuracy_decimals" ],
-        "shunt_voltage": [ "name", "accuracy_decimals" ]
+        "current": [
+          "name",
+          "accuracy_decimals"
+        ],
+        "power": [
+          "name",
+          "accuracy_decimals"
+        ],
+        "bus_voltage": [
+          "name",
+          "accuracy_decimals"
+        ],
+        "shunt_voltage": [
+          "name",
+          "accuracy_decimals"
+        ]
       },
       "ui_fields": {
         "address": {
           "type": "ComboBox",
-          "values": [ "0x40", "0x41", "0x44", "0x45" ]
+          "values": [
+            "0x40",
+            "0x41",
+            "0x44",
+            "0x45"
+          ]
         },
         "shunt_resistance": {
           "type": "NumericUpDown",
@@ -759,10 +1609,18 @@
           "max": 3600,
           "step": 1
         },
-        "current_name": { "type": "TextBox" },
-        "power_name": { "type": "TextBox" },
-        "bus_voltage_name": { "type": "TextBox" },
-        "shunt_voltage_name": { "type": "TextBox" },
+        "current_name": {
+          "type": "TextBox"
+        },
+        "power_name": {
+          "type": "TextBox"
+        },
+        "bus_voltage_name": {
+          "type": "TextBox"
+        },
+        "shunt_voltage_name": {
+          "type": "TextBox"
+        },
         "current_accuracy_decimals": {
           "type": "NumericUpDown",
           "min": 0,
@@ -788,27 +1646,117 @@
           "step": 1
         }
       },
-      "info": [ "I2C Bus notwendig" ]
-    }
-  },
- 
-
-  "SPI Sensoren": {
-    "MAX6675": {
-      "platform": "max6675",
-      "werte": [ "Temperatur (K-Typ)" ],
-      "bus": [ "spi" ],
-      "required": [ "cs_pin" ],
-      "optional": [ "name", "update_interval" ],
-      "baseconfig": [ "filter", "disabled_by_default" ],
-      "filter": [ "offset", "multiply", "median", "filter_out", "calibrate_linear" ],
-      "disable_by_default": [ "True", "False" ],
+      "info": [
+        "I2C Bus required"
+      ]
+    },
+    "SCD4x": {
+      "platform": "scd4x",
+      "bus": [
+        "i2c"
+      ],
+      "werte": [
+        "CO2 ppm",
+        "Temperature",
+        "Humidity"
+      ],
+      "required": [
+        "address"
+      ],
+      "optional": [
+        "update_interval",
+        "temperature_offset"
+      ],
+      "baseconfig": [
+        "filter",
+        "disabled_by_default"
+      ],
+      "filter": [
+        "offset",
+        "multiply",
+        "median",
+        "filter_out",
+        "sliding_window_moving_average"
+      ],
+      "disable_by_default": [
+        "True",
+        "False"
+      ],
       "ui_fields": {
-        "cs_pin": {
+        "address": {
           "type": "ComboBox",
-          "values": [ "GPIO5", "GPIO15", "GPIO16" ]
+          "values": [
+            "0x62"
+          ]
         },
-        "name": { "type": "TextBox" },
+        "update_interval": {
+          "type": "NumericUpDown",
+          "min": 1,
+          "max": 3600,
+          "step": 1
+        },
+        "temperature_offset": {
+          "type": "NumericUpDown",
+          "min": -10,
+          "max": 10,
+          "step": 0.1
+        }
+      },
+      "nested_fields": {
+        "co2": [
+          "name",
+          "accuracy_decimals"
+        ],
+        "temperature": [
+          "name",
+          "accuracy_decimals"
+        ],
+        "humidity": [
+          "name",
+          "accuracy_decimals"
+        ]
+      },
+      "info": [
+        "I2C Bus required",
+        "Sensirion SCD40/SCD41"
+      ]
+    },
+    "AHT20": {
+      "platform": "aht10",
+      "bus": [
+        "i2c"
+      ],
+      "werte": [
+        "Temperature",
+        "Humidity"
+      ],
+      "required": [
+        "address"
+      ],
+      "optional": [
+        "update_interval"
+      ],
+      "baseconfig": [
+        "filter",
+        "disabled_by_default"
+      ],
+      "filter": [
+        "offset",
+        "multiply",
+        "median",
+        "filter_out"
+      ],
+      "disable_by_default": [
+        "True",
+        "False"
+      ],
+      "ui_fields": {
+        "address": {
+          "type": "ComboBox",
+          "values": [
+            "0x38"
+          ]
+        },
         "update_interval": {
           "type": "NumericUpDown",
           "min": 1,
@@ -816,36 +1764,393 @@
           "step": 1
         }
       },
-      "info": [ "SPI Bus notwendig" ]
-    },
-
-    "MAX31855": {
-      "platform": "max31855",
-      "werte": [ "Temperatur (K-Typ, genau)" ],
-      "bus": [ "spi" ],
-      "required": [ "cs_pin" ],
-      "optional": [ "name", "update_interval" ],
-      "baseconfig": [ "filter", "disabled_by_default" ],
-      "filter": [ "offset", "multiply", "median", "filter_out", "calibrate_linear" ],
-      "disable_by_default": [ "True", "False" ],
       "nested_fields": {
-        "temperature": [ "name", "accuracy_decimals" ],
-        "internal_temperature": [ "name", "accuracy_decimals" ]
+        "temperature": [
+          "name",
+          "accuracy_decimals"
+        ],
+        "humidity": [
+          "name",
+          "accuracy_decimals"
+        ]
       },
+      "info": [
+        "I2C Bus required",
+        "AHT10/AHT20 compatible"
+      ]
+    },
+    "TSL2591": {
+      "platform": "tsl2591",
+      "bus": [
+        "i2c"
+      ],
+      "werte": [
+        "Brightness (Lux)"
+      ],
+      "required": [
+        "address"
+      ],
+      "optional": [
+        "update_interval",
+        "gain",
+        "integration_time"
+      ],
+      "baseconfig": [
+        "filter",
+        "disabled_by_default"
+      ],
+      "filter": [
+        "offset",
+        "multiply",
+        "median",
+        "filter_out",
+        "calibrate_linear"
+      ],
+      "disable_by_default": [
+        "True",
+        "False"
+      ],
       "ui_fields": {
-        "cs_pin": {
+        "address": {
           "type": "ComboBox",
-          "values": [ "GPIO5", "GPIO15", "GPIO16" ]
+          "values": [
+            "0x29"
+          ]
         },
-        "name": { "type": "TextBox" },
         "update_interval": {
           "type": "NumericUpDown",
           "min": 1,
           "max": 3600,
           "step": 1
         },
-        "temperature_name": { "type": "TextBox" },
-        "internal_temperature_name": { "type": "TextBox" },
+        "gain": {
+          "type": "ComboBox",
+          "values": [
+            "LOW",
+            "MEDIUM",
+            "HIGH",
+            "MAX"
+          ]
+        },
+        "integration_time": {
+          "type": "ComboBox",
+          "values": [
+            "100ms",
+            "200ms",
+            "300ms",
+            "400ms",
+            "500ms",
+            "600ms"
+          ]
+        }
+      },
+      "info": [
+        "I2C Bus required",
+        "Very large measuring range"
+      ]
+    },
+    "VL53L0X": {
+      "platform": "vl53l0x",
+      "bus": [
+        "i2c"
+      ],
+      "werte": [
+        "Distance"
+      ],
+      "required": [
+        "address"
+      ],
+      "optional": [
+        "update_interval"
+      ],
+      "baseconfig": [
+        "filter",
+        "disabled_by_default"
+      ],
+      "filter": [
+        "median",
+        "filter_out",
+        "sliding_window_moving_average"
+      ],
+      "disable_by_default": [
+        "True",
+        "False"
+      ],
+      "ui_fields": {
+        "address": {
+          "type": "ComboBox",
+          "values": [
+            "0x29"
+          ]
+        },
+        "update_interval": {
+          "type": "NumericUpDown",
+          "min": 1,
+          "max": 3600,
+          "step": 1
+        }
+      },
+      "nested_fields": {
+        "distance": [
+          "name",
+          "accuracy_decimals"
+        ]
+      },
+      "info": [
+        "I2C Bus required",
+        "ToF-Sensor 30–2000 mm"
+      ]
+    },
+    "INA3221": {
+      "platform": "ina3221",
+      "bus": [
+        "i2c"
+      ],
+      "werte": [
+        "Voltage (3 Channels)",
+        "Current (3 Channels)"
+      ],
+      "required": [
+        "address"
+      ],
+      "optional": [
+        "update_interval"
+      ],
+      "baseconfig": [
+        "filter",
+        "disabled_by_default"
+      ],
+      "filter": [
+        "offset",
+        "multiply",
+        "median",
+        "filter_out"
+      ],
+      "disable_by_default": [
+        "True",
+        "False"
+      ],
+      "nested_fields": {
+        "channel1": [
+          "name"
+        ],
+        "channel2": [
+          "name"
+        ],
+        "channel3": [
+          "name"
+        ]
+      },
+      "ui_fields": {
+        "address": {
+          "type": "ComboBox",
+          "values": [
+            "0x40",
+            "0x41",
+            "0x42",
+            "0x43"
+          ]
+        },
+        "update_interval": {
+          "type": "NumericUpDown",
+          "min": 1,
+          "max": 3600,
+          "step": 1
+        },
+        "channel1_name": {
+          "type": "TextBox"
+        },
+        "channel2_name": {
+          "type": "TextBox"
+        },
+        "channel3_name": {
+          "type": "TextBox"
+        }
+      },
+      "info": [
+        "I2C Bus required",
+        "3-Kanal Current/Voltage"
+      ]
+    },
+    "SGP40": {
+      "platform": "sgp40",
+      "bus": [
+        "i2c"
+      ],
+      "werte": [
+        "VOC Index"
+      ],
+      "required": [
+        "address"
+      ],
+      "optional": [
+        "update_interval",
+        "temperature",
+        "humidity"
+      ],
+      "baseconfig": [
+        "filter",
+        "disabled_by_default"
+      ],
+      "filter": [
+        "median",
+        "filter_out",
+        "sliding_window_moving_average"
+      ],
+      "disable_by_default": [
+        "True",
+        "False"
+      ],
+      "ui_fields": {
+        "address": {
+          "type": "ComboBox",
+          "values": [
+            "0x59"
+          ]
+        },
+        "update_interval": {
+          "type": "NumericUpDown",
+          "min": 1,
+          "max": 3600,
+          "step": 1
+        },
+        "temperature": {
+          "type": "TextBox"
+        },
+        "humidity": {
+          "type": "TextBox"
+        }
+      },
+      "nested_fields": {
+        "voc_index": [
+          "name",
+          "accuracy_decimals"
+        ]
+      },
+      "info": [
+        "I2C Bus required",
+        "VOC-Index"
+      ]
+    }
+  },
+  "SPI Sensoren": {
+    "MAX6675": {
+      "platform": "max6675",
+      "werte": [
+        "Temperature (K-Typ)"
+      ],
+      "bus": [
+        "spi"
+      ],
+      "required": [
+        "cs_pin"
+      ],
+      "optional": [
+        "name",
+        "update_interval"
+      ],
+      "baseconfig": [
+        "filter",
+        "disabled_by_default"
+      ],
+      "filter": [
+        "offset",
+        "multiply",
+        "median",
+        "filter_out",
+        "calibrate_linear"
+      ],
+      "disable_by_default": [
+        "True",
+        "False"
+      ],
+      "ui_fields": {
+        "cs_pin": {
+          "type": "ComboBox",
+          "values": [
+            "GPIO5",
+            "GPIO15",
+            "GPIO16"
+          ]
+        },
+        "name": {
+          "type": "TextBox"
+        },
+        "update_interval": {
+          "type": "NumericUpDown",
+          "min": 1,
+          "max": 3600,
+          "step": 1
+        }
+      },
+      "info": [
+        "SPI Bus required"
+      ]
+    },
+    "MAX31855": {
+      "platform": "max31855",
+      "werte": [
+        "Temperature (K-Typ)"
+      ],
+      "bus": [
+        "spi"
+      ],
+      "required": [
+        "cs_pin"
+      ],
+      "optional": [
+        "name",
+        "update_interval"
+      ],
+      "baseconfig": [
+        "filter",
+        "disabled_by_default"
+      ],
+      "filter": [
+        "offset",
+        "multiply",
+        "median",
+        "filter_out",
+        "calibrate_linear"
+      ],
+      "disable_by_default": [
+        "True",
+        "False"
+      ],
+      "nested_fields": {
+        "temperature": [
+          "name",
+          "accuracy_decimals"
+        ],
+        "internal_temperature": [
+          "name",
+          "accuracy_decimals"
+        ]
+      },
+      "ui_fields": {
+        "cs_pin": {
+          "type": "ComboBox",
+          "values": [
+            "GPIO5",
+            "GPIO15",
+            "GPIO16"
+          ]
+        },
+        "name": {
+          "type": "TextBox"
+        },
+        "update_interval": {
+          "type": "NumericUpDown",
+          "min": 1,
+          "max": 3600,
+          "step": 1
+        },
+        "temperature_name": {
+          "type": "TextBox"
+        },
+        "internal_temperature_name": {
+          "type": "TextBox"
+        },
         "temperature_accuracy_decimals": {
           "type": "NumericUpDown",
           "min": 0,
@@ -859,22 +2164,119 @@
           "step": 1
         }
       },
-      "info": [ "SPI Bus notwendig" ]
+      "info": [
+        "SPI Bus required"
+      ]
+    },
+    "MAX31865": {
+      "platform": "max31865",
+      "werte": [
+        "Temperature (PT100/PT1000)"
+      ],
+      "bus": [
+        "spi"
+      ],
+      "required": [
+        "cs_pin",
+        "reference_resistance"
+      ],
+      "optional": [
+        "rtd_wires",
+        "name",
+        "update_interval"
+      ],
+      "baseconfig": [
+        "filter",
+        "disabled_by_default"
+      ],
+      "filter": [
+        "offset",
+        "multiply",
+        "median",
+        "filter_out",
+        "calibrate_linear"
+      ],
+      "disable_by_default": [
+        "True",
+        "False"
+      ],
+      "nested_fields": {
+        "temperature": [
+          "name",
+          "accuracy_decimals"
+        ]
+      },
+      "ui_fields": {
+        "cs_pin": {
+          "type": "ComboBox",
+          "values": [
+            "GPIO5",
+            "GPIO15",
+            "GPIO16"
+          ]
+        },
+        "reference_resistance": {
+          "type": "NumericUpDown",
+          "min": 100,
+          "max": 4300,
+          "step": 1
+        },
+        "rtd_wires": {
+          "type": "ComboBox",
+          "values": [
+            "2",
+            "3",
+            "4"
+          ]
+        },
+        "name": {
+          "type": "TextBox"
+        },
+        "update_interval": {
+          "type": "NumericUpDown",
+          "min": 1,
+          "max": 3600,
+          "step": 1
+        }
+      },
+      "info": [
+        "SPI Bus required",
+        "For PT100/PT1000-Sensors"
+      ]
     }
   },
-
   "Interne Sensoren": {
     "wifi_signal": {
       "platform": "wifi_signal",
-      "werte": [ "Signalstärke" ],
-      "bus": [ "na" ],
+      "werte": [
+        "Signal strength"
+      ],
+      "bus": [
+        "na"
+      ],
       "required": [],
-      "optional": [ "name", "update_interval" ],
-      "baseconfig": [ "filter", "disabled_by_default" ],
-      "filter": [ "offset", "multiply", "median", "filter_out" ],
-      "disable_by_default": [ "True", "False" ],
+      "optional": [
+        "name",
+        "update_interval"
+      ],
+      "baseconfig": [
+        "filter",
+        "disabled_by_default"
+      ],
+      "filter": [
+        "offset",
+        "multiply",
+        "median",
+        "filter_out"
+      ],
+      "disable_by_default": [
+        "True",
+        "False"
+      ],
       "ui_fields": {
-        "name": { "type": "TextBox" },
+        "name": {
+          "type": "TextBox"
+        },
         "update_interval": {
           "type": "NumericUpDown",
           "min": 1,
@@ -882,20 +2284,41 @@
           "step": 1
         }
       },
-      "info": [ "Interner Sensor – kein externer Bus nötig" ]
+      "info": [
+        "Internal Sensor – no external bus required"
+      ]
     },
-
     "uptime": {
       "platform": "uptime",
-      "werte": [ "Sekunden" ],
-      "bus": [ "na" ],
+      "werte": [
+        "Second"
+      ],
+      "bus": [
+        "na"
+      ],
       "required": [],
-      "optional": [ "name", "update_interval" ],
-      "baseconfig": [ "filter", "disabled_by_default" ],
-      "filter": [ "offset", "multiply", "median", "filter_out" ],
-      "disable_by_default": [ "True", "False" ],
+      "optional": [
+        "name",
+        "update_interval"
+      ],
+      "baseconfig": [
+        "filter",
+        "disabled_by_default"
+      ],
+      "filter": [
+        "offset",
+        "multiply",
+        "median",
+        "filter_out"
+      ],
+      "disable_by_default": [
+        "True",
+        "False"
+      ],
       "ui_fields": {
-        "name": { "type": "TextBox" },
+        "name": {
+          "type": "TextBox"
+        },
         "update_interval": {
           "type": "NumericUpDown",
           "min": 1,
@@ -903,20 +2326,41 @@
           "step": 1
         }
       },
-      "info": [ "Interner Sensor – kein externer Bus nötig" ]
+      "info": [
+        "Internal Sensor – no external bus required"
+      ]
     },
-
     "internal_temperature": {
       "platform": "internal_temperature",
-      "werte": [ "CPU-Temperatur" ],
-      "bus": [ "na" ],
+      "werte": [
+        "CPU-Temperature"
+      ],
+      "bus": [
+        "na"
+      ],
       "required": [],
-      "optional": [ "name", "update_interval" ],
-      "baseconfig": [ "filter", "disabled_by_default" ],
-      "filter": [ "offset", "multiply", "median", "filter_out" ],
-      "disable_by_default": [ "True", "False" ],
+      "optional": [
+        "name",
+        "update_interval"
+      ],
+      "baseconfig": [
+        "filter",
+        "disabled_by_default"
+      ],
+      "filter": [
+        "offset",
+        "multiply",
+        "median",
+        "filter_out"
+      ],
+      "disable_by_default": [
+        "True",
+        "False"
+      ],
       "ui_fields": {
-        "name": { "type": "TextBox" },
+        "name": {
+          "type": "TextBox"
+        },
         "update_interval": {
           "type": "NumericUpDown",
           "min": 1,
@@ -924,53 +2368,204 @@
           "step": 1
         }
       },
-      "info": [ "Interner Sensor – kein externer Bus nötig" ]
+      "info": [
+        "Internal Sensor – no external bus required"
+      ]
     }
   },
-
   "Analoge Sensoren / ADC": {
     "ADC": {
       "platform": "adc",
-      "bus": [ "na" ],
-      "werte": [ "Spannung (Analogpin)" ],
-      "required": [ "pin" ],
-      "optional": [ "attenuation", "name", "update_interval" ],
-      "baseconfig": [ "filter", "disabled_by_default" ],
-      "filter": [ "offset", "multiply", "median", "filter_out", "calibrate_linear", "sliding_window_moving_average" ],
-      "disable_by_default": [ "True", "False" ],
+      "bus": [
+        "na"
+      ],
+      "werte": [
+        "Voltage (Analogpin)"
+      ],
+      "required": [
+        "pin"
+      ],
+      "optional": [
+        "attenuation",
+        "name",
+        "update_interval"
+      ],
+      "baseconfig": [
+        "filter",
+        "disabled_by_default"
+      ],
+      "filter": [
+        "offset",
+        "multiply",
+        "median",
+        "filter_out",
+        "calibrate_linear",
+        "sliding_window_moving_average"
+      ],
+      "disable_by_default": [
+        "True",
+        "False"
+      ],
       "ui_fields": {
         "pin": {
           "type": "ComboBox",
-          "values": [ "A0", "GPIO32", "GPIO33", "GPIO34", "GPIO35", "GPIO36", "GPIO39" ]
+          "values": [
+            "A0",
+            "GPIO32",
+            "GPIO33",
+            "GPIO34",
+            "GPIO35",
+            "GPIO36",
+            "GPIO39"
+          ]
         },
         "attenuation": {
           "type": "ComboBox",
-          "values": [ "0db", "2.5db", "6db", "11db" ]
+          "values": [
+            "0db",
+            "2.5db",
+            "6db",
+            "11db"
+          ]
         },
-        "name": { "type": "TextBox" },
+        "name": {
+          "type": "TextBox"
+        },
         "update_interval": {
           "type": "NumericUpDown",
           "min": 1,
           "max": 3600,
           "step": 1
         }
+      },
+      "HX711": {
+        "platform": "hx711",
+        "bus": [
+          "na"
+        ],
+        "werte": [
+          "Weight"
+        ],
+        "required": [
+          "dout_pin",
+          "clk_pin"
+        ],
+        "optional": [
+          "name",
+          "gain",
+          "update_interval"
+        ],
+        "baseconfig": [
+          "filter",
+          "disabled_by_default"
+        ],
+        "filter": [
+          "median",
+          "filter_out",
+          "sliding_window_moving_average"
+        ],
+        "disable_by_default": [
+          "True",
+          "False"
+        ],
+        "ui_fields": {
+          "dout_pin": {
+            "type": "ComboBox",
+            "values": [
+              "GPIO2",
+              "GPIO4",
+              "GPIO5",
+              "GPIO12",
+              "GPIO13",
+              "GPIO14",
+              "GPIO15"
+            ]
+          },
+          "clk_pin": {
+            "type": "ComboBox",
+            "values": [
+              "GPIO2",
+              "GPIO4",
+              "GPIO5",
+              "GPIO12",
+              "GPIO13",
+              "GPIO14",
+              "GPIO15"
+            ]
+          },
+          "gain": {
+            "type": "ComboBox",
+            "values": [
+              "128",
+              "64",
+              "32"
+            ]
+          },
+          "name": {
+            "type": "TextBox"
+          },
+          "update_interval": {
+            "type": "NumericUpDown",
+            "min": 1,
+            "max": 3600,
+            "step": 1
+          }
+        },
+        "nested_fields": {
+          "weight": [
+            "name",
+            "accuracy_decimals"
+          ]
+        },
+        "info": [
+          "External ADC for load cells"
+        ]
       }
     },
     "NTC": {
       "platform": "ntc",
-      "bus": [ "na" ],
-      "werte": [ "Temperatur" ],
-      "required": [ "sensor", "calibration" ],
-      "optional": [ "name", "accuracy_decimals" ],
-      "baseconfig": [ "filter", "disabled_by_default" ],
-      "filter": [ "offset", "multiply", "median", "filter_out" ],
-      "disable_by_default": [ "True", "False" ],
+      "bus": [
+        "na"
+      ],
+      "werte": [
+        "Temperature"
+      ],
+      "required": [
+        "sensor",
+        "calibration"
+      ],
+      "optional": [
+        "name",
+        "accuracy_decimals"
+      ],
+      "baseconfig": [
+        "filter",
+        "disabled_by_default"
+      ],
+      "filter": [
+        "offset",
+        "multiply",
+        "median",
+        "filter_out"
+      ],
+      "disable_by_default": [
+        "True",
+        "False"
+      ],
       "nested_fields": {
-        "calibration": [ "b_constant", "reference_temperature", "reference_resistance" ]
+        "calibration": [
+          "b_constant",
+          "reference_temperature",
+          "reference_resistance"
+        ]
       },
       "ui_fields": {
-        "sensor": { "type": "TextBox" },
-        "name": { "type": "TextBox" },
+        "sensor": {
+          "type": "TextBox"
+        },
+        "name": {
+          "type": "TextBox"
+        },
         "b_constant": {
           "type": "NumericUpDown",
           "min": 1000,
@@ -990,14 +2585,22 @@
           "step": 100
         }
       },
-      "info": [ "Basiert auf ADC Sensor", "Günstige Temperaturmessung" ]
+      "info": [
+        "Based on ADC sensor",
+        "Cheap Temperature measurement"
+      ]
     },
-
     "pulse_counter": {
       "platform": "pulse_counter",
-      "werte": [ "Impulse/Zählung" ],
-      "bus": [ "na" ],
-      "required": [ "pin" ],
+      "werte": [
+        "Impulse/Counting"
+      ],
+      "bus": [
+        "na"
+      ],
+      "required": [
+        "pin"
+      ],
       "optional": [
         "name",
         "internal_filter",
@@ -1006,18 +2609,40 @@
         "accuracy_decimals",
         "id"
       ],
-      "baseconfig": [ "filter", "disabled_by_default" ],
-      "filter": [ "offset", "multiply", "median", "filter_out", "lambda" ],
-      "disable_by_default": [ "True", "False" ],
+      "baseconfig": [
+        "filter",
+        "disabled_by_default"
+      ],
+      "filter": [
+        "offset",
+        "multiply",
+        "median",
+        "filter_out",
+        "lambda"
+      ],
+      "disable_by_default": [
+        "True",
+        "False"
+      ],
       "nested_fields": {
-        "count_mode": [ "rising_edge", "falling_edge" ]
+        "count_mode": [
+          "rising_edge",
+          "falling_edge"
+        ]
       },
       "ui_fields": {
         "pin": {
           "type": "ComboBox",
-          "values": [ "GPIO12", "GPIO13", "GPIO14", "GPIO27" ]
+          "values": [
+            "GPIO12",
+            "GPIO13",
+            "GPIO14",
+            "GPIO27"
+          ]
         },
-        "name": { "type": "TextBox" },
+        "name": {
+          "type": "TextBox"
+        },
         "internal_filter": {
           "type": "NumericUpDown",
           "min": 0,
@@ -1026,15 +2651,28 @@
         },
         "unit_of_measurement": {
           "type": "ComboBox",
-          "values": [ "l/min", "rpm", "Hz", "imp/min" ]
+          "values": [
+            "l/min",
+            "rpm",
+            "Hz",
+            "imp/min"
+          ]
         },
         "count_mode_rising_edge": {
           "type": "ComboBox",
-          "values": [ "INCREMENT", "DECREMENT", "DISABLE" ]
+          "values": [
+            "INCREMENT",
+            "DECREMENT",
+            "DISABLE"
+          ]
         },
         "count_mode_falling_edge": {
           "type": "ComboBox",
-          "values": [ "INCREMENT", "DECREMENT", "DISABLE" ]
+          "values": [
+            "INCREMENT",
+            "DECREMENT",
+            "DISABLE"
+          ]
         },
         "update_interval": {
           "type": "NumericUpDown",
@@ -1048,30 +2686,61 @@
           "max": 5,
           "step": 1
         },
-        "id": { "type": "TextBox" }
+        "id": {
+          "type": "TextBox"
+        }
       }
     }
   },
-
   "Virtuelle / Software Sensoren": {
     "template": {
       "platform": "template",
-      "werte": [ "Benutzerdefiniert" ],
-      "bus": [ "na" ],
-      "required": [ "name", "lambda" ],
-      "optional": [ "unit_of_measurement", "update_interval", "accuracy_decimals" ],
-      "baseconfig": [ "filter", "disabled_by_default" ],
-      "filter": [ "offset", "multiply", "median", "filter_out" ],
-      "disable_by_default": [ "True", "False" ],
+      "werte": [
+        "Custom"
+      ],
+      "bus": [
+        "na"
+      ],
+      "required": [
+        "name",
+        "lambda"
+      ],
+      "optional": [
+        "unit_of_measurement",
+        "update_interval",
+        "accuracy_decimals"
+      ],
+      "baseconfig": [
+        "filter",
+        "disabled_by_default"
+      ],
+      "filter": [
+        "offset",
+        "multiply",
+        "median",
+        "filter_out"
+      ],
+      "disable_by_default": [
+        "True",
+        "False"
+      ],
       "ui_fields": {
-        "name": { "type": "TextBox" },
+        "name": {
+          "type": "TextBox"
+        },
         "lambda": {
           "type": "TextBox",
           "multiline": true
         },
         "unit_of_measurement": {
           "type": "ComboBox",
-          "values": [ "°C", "V", "A", "rpm", "l/min" ]
+          "values": [
+            "°C",
+            "V",
+            "A",
+            "rpm",
+            "l/min"
+          ]
         },
         "update_interval": {
           "type": "NumericUpDown",
@@ -1086,28 +2755,65 @@
           "step": 1
         }
       },
-      "info": [ "Virtueller Sensor – kein Bus notwendig" ]
+      "info": [
+        "Virtual sensor – no bus required"
+      ]
     },
-
     "integration": {
       "platform": "integration",
-      "werte": [ "Fläche (z.B. Energie aus Leistung)" ],
-      "bus": [ "na" ],
-      "required": [ "sensor" ],
-      "optional": [ "time_unit", "name", "unit_of_measurement", "accuracy_decimals", "id" ],
-      "baseconfig": [ "filter", "disabled_by_default" ],
-      "filter": [ "offset", "multiply", "median", "filter_out" ],
-      "disable_by_default": [ "True", "False" ],
+      "werte": [
+        "Area (e.g. energy from power)"
+      ],
+      "bus": [
+        "na"
+      ],
+      "required": [
+        "sensor"
+      ],
+      "optional": [
+        "time_unit",
+        "name",
+        "unit_of_measurement",
+        "accuracy_decimals",
+        "id"
+      ],
+      "baseconfig": [
+        "filter",
+        "disabled_by_default"
+      ],
+      "filter": [
+        "offset",
+        "multiply",
+        "median",
+        "filter_out"
+      ],
+      "disable_by_default": [
+        "True",
+        "False"
+      ],
       "ui_fields": {
-        "sensor": { "type": "TextBox" },
+        "sensor": {
+          "type": "TextBox"
+        },
         "time_unit": {
           "type": "ComboBox",
-          "values": [ "s", "min", "h" ]
+          "values": [
+            "s",
+            "min",
+            "h"
+          ]
         },
-        "name": { "type": "TextBox" },
+        "name": {
+          "type": "TextBox"
+        },
         "unit_of_measurement": {
           "type": "ComboBox",
-          "values": [ "Wh", "Ah", "l", "m³" ]
+          "values": [
+            "Wh",
+            "Ah",
+            "l",
+            "m³"
+          ]
         },
         "accuracy_decimals": {
           "type": "NumericUpDown",
@@ -1115,9 +2821,13 @@
           "max": 5,
           "step": 1
         },
-        "id": { "type": "TextBox" }
+        "id": {
+          "type": "TextBox"
+        }
       },
-      "info": [ "Virtueller Sensor – kein Bus notwendig" ]
+      "info": [
+        "Virtual sensor – no bus required"
+      ]
     }
   }
 }

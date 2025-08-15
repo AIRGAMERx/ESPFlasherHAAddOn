@@ -6,7 +6,7 @@
         "i2c"
       ],
       "werte": [
-        "OLED Display 128x64"
+        "OLED 128x64 / 128x32 / 96x16 / 64x48"
       ],
       "required": [
         "address"
@@ -68,12 +68,13 @@
         },
         "lambda": {
           "type": "TextBox",
-          "multiline": true
+          "multiline": true,
+          "placeholder": "it.print(\"Hello World\");"
         }
       },
       "info": [
-        "I2C Bus notwendig",
-        "Beliebtes OLED Display"
+        "I2C Bus required",
+        "Popular OLED display"
       ]
     },
     "SH1106": {
@@ -82,7 +83,7 @@
         "i2c"
       ],
       "werte": [
-        "OLED Display 128x64"
+        "OLED 128x64 / 128x32 / 96x16"
       ],
       "required": [
         "address"
@@ -147,8 +148,8 @@
         }
       },
       "info": [
-        "I2C Bus notwendig",
-        "Alternative zu SSD1306"
+        "I2C Bus required",
+        "Alternate to SSD1306"
       ]
     },
     "LCD_PCF8574": {
@@ -157,17 +158,18 @@
         "i2c"
       ],
       "werte": [
-        "LCD Display mit I2C Backpack"
+        "Character LCD 16x2/ 20x4 (I2C Backpack)"
       ],
       "required": [
         "dimensions"
       ],
       "optional": [
-        "lambda",
-        "address"
+        "address",
+        "lambda"
       ],
       "baseconfig": [
-        "disabled_by_default"
+        "disabled_by_default",
+        "lambda"
       ],
       "disable_by_default": [
         "True",
@@ -200,8 +202,61 @@
         }
       },
       "info": [
-        "I2C Bus notwendig",
-        "Standard LCD-Größen"
+        "I2C Bus required",
+        "Standard LCD sizes"
+      ]
+    },
+    "HT16K33_7Segment": {
+      "platform": "ht16k33",
+      "bus": [
+        "i2c"
+      ],
+      "werte": [
+        "4/6/8-digit 7-segment display, matrix"
+      ],
+      "required": [
+        "address"
+      ],
+      "optional": [
+        "brightness",
+        "lambda"
+      ],
+      "baseconfig": [
+        "disabled_by_default",
+        "lambda"
+      ],
+      "disable_by_default": [
+        "True",
+        "False"
+      ],
+      "ui_fields": {
+        "address": {
+          "type": "ComboBox",
+          "values": [
+            "0x70",
+            "0x71",
+            "0x72",
+            "0x73",
+            "0x74",
+            "0x75",
+            "0x76",
+            "0x77"
+          ]
+        },
+        "brightness": {
+          "type": "NumericUpDown",
+          "min": 0,
+          "max": 15,
+          "step": 1
+        },
+        "lambda": {
+          "type": "TextBox",
+          "multiline": true
+        }
+      },
+      "info": [
+        "I2C Bus required",
+        "7-Segment/LED-Matrix via HT16K33"
       ]
     }
   },
@@ -212,7 +267,7 @@
         "spi"
       ],
       "werte": [
-        "TFT Display farbig"
+        "TFT 128x160 colored"
       ],
       "required": [
         "cs_pin",
@@ -283,8 +338,79 @@
         }
       },
       "info": [
-        "SPI Bus notwendig",
-        "Kleines Farb-TFT Display"
+        "SPI Bus required",
+        "Small color-TFT Display"
+      ]
+    },
+    "ST7789": {
+      "platform": "st7789v",
+      "bus": [
+        "spi"
+      ],
+      "werte": [
+        "TFT 240x240 / 240x320 colored"
+      ],
+      "required": [
+        "cs_pin",
+        "dc_pin",
+        "reset_pin"
+      ],
+      "optional": [
+        "rotation",
+        "lambda"
+      ],
+      "baseconfig": [
+        "disabled_by_default",
+        "lambda"
+      ],
+      "disable_by_default": [
+        "True",
+        "False"
+      ],
+      "ui_fields": {
+        "cs_pin": {
+          "type": "ComboBox",
+          "values": [
+            "GPIO5",
+            "GPIO15",
+            "GPIO16"
+          ]
+        },
+        "dc_pin": {
+          "type": "ComboBox",
+          "values": [
+            "GPIO2",
+            "GPIO4",
+            "GPIO16",
+            "GPIO17"
+          ]
+        },
+        "reset_pin": {
+          "type": "ComboBox",
+          "values": [
+            "GPIO2",
+            "GPIO4",
+            "GPIO16",
+            "GPIO17"
+          ]
+        },
+        "rotation": {
+          "type": "ComboBox",
+          "values": [
+            "0°",
+            "90°",
+            "180°",
+            "270°"
+          ]
+        },
+        "lambda": {
+          "type": "TextBox",
+          "multiline": true
+        }
+      },
+      "info": [
+        "SPI Bus required",
+        "Round/square TFT (depending on the module)"
       ]
     },
     "ILI9341": {
@@ -293,7 +419,7 @@
         "spi"
       ],
       "werte": [
-        "TFT Display 240x320 farbig"
+        "TFT 240x320 colored"
       ],
       "required": [
         "cs_pin",
@@ -364,8 +490,89 @@
         }
       },
       "info": [
-        "SPI Bus notwendig",
-        "Großes Farb-TFT Display"
+        "SPI Bus required",
+        "TFT 240x320 colored"
+      ]
+    },
+    "ILI9488": {
+      "platform": "ili9488",
+      "bus": [
+        "spi"
+      ],
+      "werte": [
+        "TFT 320x480 colored"
+      ],
+      "required": [
+        "cs_pin",
+        "dc_pin"
+      ],
+      "optional": [
+        "reset_pin",
+        "led_pin",
+        "rotation",
+        "lambda"
+      ],
+      "baseconfig": [
+        "disabled_by_default",
+        "lambda"
+      ],
+      "disable_by_default": [
+        "True",
+        "False"
+      ],
+      "ui_fields": {
+        "cs_pin": {
+          "type": "ComboBox",
+          "values": [
+            "GPIO5",
+            "GPIO15",
+            "GPIO16"
+          ]
+        },
+        "dc_pin": {
+          "type": "ComboBox",
+          "values": [
+            "GPIO2",
+            "GPIO4",
+            "GPIO16",
+            "GPIO17"
+          ]
+        },
+        "reset_pin": {
+          "type": "ComboBox",
+          "values": [
+            "GPIO2",
+            "GPIO4",
+            "GPIO16",
+            "GPIO17"
+          ]
+        },
+        "led_pin": {
+          "type": "ComboBox",
+          "values": [
+            "GPIO2",
+            "GPIO4",
+            "GPIO16",
+            "GPIO17"
+          ]
+        },
+        "rotation": {
+          "type": "ComboBox",
+          "values": [
+            "0°",
+            "90°",
+            "180°",
+            "270°"
+          ]
+        },
+        "lambda": {
+          "type": "TextBox",
+          "multiline": true
+        }
+      },
+      "info": [
+        "SPI Bus required",
+        "Large color TFT display"
       ]
     }
   },
@@ -376,7 +583,7 @@
         "spi"
       ],
       "werte": [
-        "7-Segment Anzeige"
+        "7-segment / matrix (cascadable)"
       ],
       "required": [
         "cs_pin"
@@ -421,8 +628,8 @@
         }
       },
       "info": [
-        "SPI Bus notwendig",
-        "Kaskadierbare 7-Segment Anzeigen"
+        "SPI Bus required",
+        "Cascadable 7-segment/matrix"
       ]
     },
     "TM1637": {
@@ -431,7 +638,7 @@
         "na"
       ],
       "werte": [
-        "4-stellige 7-Segment Anzeige"
+        "4-digit 7-segment display"
       ],
       "required": [
         "clk_pin",
@@ -484,8 +691,8 @@
         }
       },
       "info": [
-        "Zwei GPIO Pins erforderlich",
-        "Günstige 4-stellige Anzeige"
+        "Two GPIO Pins required",
+        "Affordable 4-digit display"
       ]
     }
   },
@@ -496,7 +703,7 @@
         "spi"
       ],
       "werte": [
-        "E-Paper Display"
+        "E-paper 1.54–7.50 inches (monochrome/partially bicolor)"
       ],
       "required": [
         "cs_pin",
@@ -558,8 +765,10 @@
           "values": [
             "1.54in",
             "2.13in",
+            "2.7in",
             "2.90in",
             "4.20in",
+            "5.83in",
             "7.50in"
           ]
         },
@@ -578,19 +787,19 @@
         }
       },
       "info": [
-        "SPI Bus notwendig",
-        "Stromsparende E-Paper Displays"
+        "SPI Bus required",
+        "Energy-saving e-paper displays"
       ]
     }
   },
   "Addressierbare LEDs": {
-    "FastLED": {
+    "FastLED_Clockless": {
       "platform": "fastled_clockless",
       "bus": [
         "na"
       ],
       "werte": [
-        "WS2812B LED Streifen"
+        "WS2812B/WS2811/SK6812 (1-wire)"
       ],
       "required": [
         "chipset",
@@ -615,8 +824,7 @@
           "values": [
             "WS2812B",
             "WS2811",
-            "SK6812",
-            "APA102"
+            "SK6812"
           ]
         },
         "pin": {
@@ -663,8 +871,95 @@
         }
       },
       "info": [
-        "Ein GPIO Pin erforderlich",
-        "Addressierbare RGB LEDs"
+        "One GPIO Pin required",
+        "Addressierbare RGB(W) LEDs"
+      ]
+    },
+    "FastLED_SPI": {
+      "platform": "fastled_spi",
+      "bus": [
+        "spi"
+      ],
+      "werte": [
+        "APA102/WS2801 (2-wire, SPI-like)"
+      ],
+      "required": [
+        "chipset",
+        "data_pin",
+        "clock_pin",
+        "num_leds"
+      ],
+      "optional": [
+        "rgb_order",
+        "max_refresh_rate",
+        "color_correct"
+      ],
+      "baseconfig": [
+        "disabled_by_default"
+      ],
+      "disable_by_default": [
+        "True",
+        "False"
+      ],
+      "ui_fields": {
+        "chipset": {
+          "type": "ComboBox",
+          "values": [
+            "APA102",
+            "WS2801"
+          ]
+        },
+        "data_pin": {
+          "type": "ComboBox",
+          "values": [
+            "GPIO23",
+            "GPIO13",
+            "GPIO14"
+          ]
+        },
+        "clock_pin": {
+          "type": "ComboBox",
+          "values": [
+            "GPIO18",
+            "GPIO25",
+            "GPIO26"
+          ]
+        },
+        "num_leds": {
+          "type": "NumericUpDown",
+          "min": 1,
+          "max": 1000,
+          "step": 1
+        },
+        "rgb_order": {
+          "type": "ComboBox",
+          "values": [
+            "RGB",
+            "RBG",
+            "GRB",
+            "GBR",
+            "BRG",
+            "BGR"
+          ]
+        },
+        "max_refresh_rate": {
+          "type": "NumericUpDown",
+          "min": 1,
+          "max": 2000,
+          "step": 1
+        },
+        "color_correct": {
+          "type": "ComboBox",
+          "values": [
+            "255, 255, 255",
+            "255, 176, 240",
+            "255, 255, 176"
+          ]
+        }
+      },
+      "info": [
+        "SPI/SPI-like Bus",
+        "Very clean timing, long lengths possible"
       ]
     }
   }
