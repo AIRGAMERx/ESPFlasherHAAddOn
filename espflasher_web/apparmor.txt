@@ -1,30 +1,24 @@
 #include <tunables/global>
 
 /usr/bin/python3 {
-  # Standardrechte für Add-ons
-  capability,
+  #include <abstractions/base>
+
   network inet stream,
   network inet6 stream,
   network inet dgram,
   network inet6 dgram,
 
-  # Zugriff nur auf /data (persistent)
   /data/** rwk,
-
-  # Zugriff auf temporäre Verzeichnisse
   /tmp/** rw,
+  /etc/ssl/** r,
 
-  # Zugriff auf Python/ESPHome/Flask im Container
   /usr/bin/** rix,
   /usr/lib/** mr,
   /usr/local/lib/** mr,
 
-  # Logging erlaubt
-  /dev/tty rw,
   /dev/null rw,
   /dev/urandom r,
 
-  # Verbieten, was nicht nötig ist
   deny /mnt/** rwklx,
   deny /media/** rwklx,
   deny /share/** rwklx,
