@@ -12,23 +12,13 @@ arch:
 startup: application
 boot: auto
 
-# Ingress aus, weil Web Serial top-level Tab braucht
+
 ingress: false
 webui: "http://[HOST]:[PORT:8099]"
 
-# Nur den einen Port freigeben – KEIN host_network
+
 ports:
   8099/tcp: 8099
-
-# Keine extr. Mounts – nutze /data im Container
-# map: []
-
-# Kein USB/Devices, wenn Web Serial im Browser genutzt wird
-# usb: false
-# devices: []
-
-# Keine extra Privilegien
-# privileged: []
 
 
 apparmor: true
