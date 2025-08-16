@@ -1,45 +1,37 @@
 name: ESPFlasher Web
 version: "1.0.1"
 slug: espflasher_web
-description: Web-based interface to configure, compile, and flash ESP32 devices via OTA or USB.
+description: Web-based interface to configure, compile, and flash ESP32 devices via OTA or USB (Web Serial).
 url: https://github.com/AIRGAMERx/ESPFlasherHAAddOn
 arch:
   - aarch64
   - amd64
   - armv7
   - i386
+
 startup: application
 boot: auto
 
-# Ingress deaktiviert
+# Ingress aus, weil Web Serial top-level Tab braucht
 ingress: false
-
-# Sichtbar im Seitenmenü
-panel_icon: mdi:chip
-panel_title: ESPFlasher
-
-# WebUI: öffnet im neuen Tab
 webui: "http://[HOST]:[PORT:8099]"
 
-# Lokales Netzwerk für OTA (mDNS etc.)
-host_network: true
-
+# Nur den einen Port freigeben – KEIN host_network
 ports:
   8099/tcp: 8099
 
-map:
-  - config:rw
-  - share:rw
-  - cache:rw
-  - www:rw
+# Keine extr. Mounts – nutze /data im Container
+# map: []
 
-devices:
-  - /dev/ttyUSB0
-  - /dev/ttyUSB1
-  - /dev/ttyACM0
-usb: true
-privileged:
-  - SYS_RAWIO
+# Kein USB/Devices, wenn Web Serial im Browser genutzt wird
+# usb: false
+# devices: []
+
+# Keine extra Privilegien
+# privileged: []
+
+
+apparmor: true
 
 options: {}
 schema: {}
