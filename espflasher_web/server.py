@@ -1,5 +1,5 @@
 # server.py
-from flask import Flask, request, Response, send_from_directory, jsonify
+from flask import Flask, request, Response, send_from_directory, jsonify, send_file
 import os
 import subprocess
 from flask_cors import CORS
@@ -10,10 +10,10 @@ import socket
 from pathlib import Path
 from datetime import datetime, timezone
 import uuid
+from typing import Tuple, Optional, Dict, Any
 
 # ---------- Flask setup ----------
 app = Flask(__name__, static_folder="/app/www", static_url_path="/")
-# Wenn UI über Ingress/gleiches Origin läuft, ist CORS nicht nötig – ansonsten hier eingeschränkt lassen
 CORS(app)
 
 # ---------- Paths ----------
@@ -24,21 +24,73 @@ os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 DEVICES_FILE = Path("/data/devices.json")
 
-# ---------- Helpers: devices registry ----------
-def _load_devices():
+# ---------- Helpers: JSON store ----------
+def _iso_now() -> str:
+    return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
+
+def _atomic_write(path: Path, data: Dict[str, Any]) -> None:
+    tmp = path.with_suffix(".tmp")
+    tmp.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+    os.replace(tmp, path)
+
+def _load_devices() -> Dict[str, Any]:
     if DEVICES_FILE.exists():
         try:
-            return json.loads(DEVICES_FILE.read_text(encoding="utf-8"))
+            db = json.loads(DEVICES_FILE.read_text(encoding="utf-8"))
+            # migrate in place if needed
+            changed = False
+            db.setdefault("devices", [])
+            db.setdefault("version", 1)
+            for d in db["devices"]:
+                if _migrate_device_inplace(d):
+                    changed = True
+            if changed:
+                _atomic_write(DEVICES_FILE, db)
+            return db
         except Exception:
             pass
     return {"devices": [], "version": 1}
 
-def _save_devices(db):
-    DEVICES_FILE.write_text(json.dumps(db, ensure_ascii=False, indent=2), encoding="utf-8")
+def _save_devices(db: Dict[str, Any]) -> None:
+    _atomic_write(DEVICES_FILE, db)
 
-def _iso_now():
-    return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
+def _migrate_device_inplace(d: Dict[str, Any]) -> bool:
+    """Ensure required keys exist; mirror yaml <-> yaml_snapshot; parse config_json string."""
+    changed = False
+    # id
+    if not d.get("id"):
+        d["id"] = str(uuid.uuid4()); changed = True
+    # yaml/yaml_snapshot mirror
+    y = d.get("yaml")
+    ys = d.get("yaml_snapshot")
+    if y and not ys:
+        d["yaml_snapshot"] = y; changed = True
+    if ys and not y:
+        d["yaml"] = ys; changed = True
+    # config_json ensure dict
+    cj = d.get("config_json")
+    if isinstance(cj, str):
+        try:
+            d["config_json"] = json.loads(cj); changed = True
+        except Exception:
+            d["config_json"] = {}
+            changed = True
+    elif cj is None:
+        d["config_json"] = {}; changed = True
+    # friendly_name
+    if not d.get("friendly_name"):
+        d["friendly_name"] = d.get("name", ""); changed = True
+    # board label/id normalisieren
+    if not d.get("board_label") and d.get("board"):
+        d["board_label"] = d["board"]; changed = True
+    if not d.get("flashed_at"):
+        d["flashed_at"] = _iso_now(); changed = True
+    # history
+    if not isinstance(d.get("history"), list):
+        d["history"] = []; changed = True
+    return changed
 
+# ---------- Helpers: platform/board ----------
 def detect_platform_from_yaml(text: str) -> str:
     t = text.lower()
     if "\nesp8266:" in t:
@@ -50,18 +102,34 @@ def detect_platform_from_yaml(text: str) -> str:
 def chip_family_for_platform(platform: str) -> str:
     return "ESP8266" if platform.upper() == "ESP8266" else "ESP32"
 
-def upsert_device_record(*, name: str, platform: str, board: str, yaml_text: str,
-                         firmware_sha256: str | None = None, ip: str | None = None,
-                         mac: str | None = None):
-    """Create/update a device entry keyed by (name+platform). Keeps simple history."""
+def unify_board(payload: Dict[str, Any]) -> Tuple[str, str]:
+    """Return (board_label, board_id) from incoming payload."""
+    label = payload.get("board_label") or payload.get("board") or payload.get("board_id") or ""
+    bid = payload.get("board_id") or ""
+    return label, bid
+
+# ---------- Registry upsert used by compile/flash ----------
+def upsert_device_record(
+    *,
+    name: str,
+    platform: str,
+    board_label: str,
+    board_id: str,
+    yaml_text: str,
+    config_json: Optional[Dict[str, Any]] = None,
+    firmware_sha256: Optional[str] = None,
+    ip: Optional[str] = None,
+    mac: Optional[str] = None,
+) -> Dict[str, Any]:
+    """
+    Create/update a device entry keyed by (name+platform). Keeps simple history.
+    """
     db = _load_devices()
-    # try to find existing by name+platform
     existing = next((d for d in db["devices"]
                      if d.get("name") == name and d.get("platform") == platform), None)
 
     now_iso = _iso_now()
     if existing:
-        # history append
         hist = existing.get("history", [])
         if existing.get("flashed_at") or existing.get("firmware_sha256"):
             hist.append({
@@ -70,22 +138,33 @@ def upsert_device_record(*, name: str, platform: str, board: str, yaml_text: str
             })
         existing.update({
             "friendly_name": existing.get("friendly_name") or name,
-            "board": board,
+            "platform": platform,
+            "board": board_label,
+            "board_label": board_label,
+            "board_id": board_id,
             "yaml": yaml_text,
+            "yaml_snapshot": yaml_text,
+            "config_json": config_json or existing.get("config_json") or {},
             "firmware_sha256": firmware_sha256,
             "ip": ip or existing.get("ip"),
             "mac": mac or existing.get("mac"),
             "flashed_at": now_iso,
             "history": [h for h in hist if h.get("flashed_at")]
         })
+        _save_devices(db)
+        return existing
     else:
-        db["devices"].append({
+        dev = {
             "id": str(uuid.uuid4()),
             "name": name,
             "friendly_name": name,
             "platform": platform,
-            "board": board,
+            "board": board_label,
+            "board_label": board_label,
+            "board_id": board_id,
             "yaml": yaml_text,
+            "yaml_snapshot": yaml_text,
+            "config_json": config_json or {},
             "firmware_sha256": firmware_sha256,
             "ip": ip,
             "mac": mac,
@@ -93,29 +172,27 @@ def upsert_device_record(*, name: str, platform: str, board: str, yaml_text: str
             "notes": "",
             "flashed_at": now_iso,
             "history": []
-        })
-    _save_devices(db)
+        }
+        db["devices"].append(dev)
+        _save_devices(db)
+        return dev
 
 # ---------- Build artifacts ----------
-def get_firmware_paths(name: str):
-    """Find the latest built firmware .bin in ESPHome build tree and our manifest target path."""
+def get_firmware_paths(name: str) -> Tuple[Optional[str], Optional[str]]:
+    """Find latest built firmware.bin and target manifest path."""
     build_root = os.path.join(YAML_DIR, ".esphome", "build")
     if not os.path.exists(build_root):
         return None, None
-
     env_dirs = [d for d in os.listdir(build_root)
                 if os.path.isdir(os.path.join(build_root, d))]
     if not env_dirs:
         return None, None
-
     env_dirs.sort(key=lambda x: os.path.getmtime(os.path.join(build_root, x)), reverse=True)
     build_env = env_dirs[0]
     build_dir = os.path.join(build_root, build_env, ".pioenvs", build_env)
-
     bin_path = os.path.join(build_dir, "firmware.bin")
     if not os.path.exists(bin_path):
         bin_path = os.path.join(build_dir, "firmware.factory.bin")
-
     manifest_path = os.path.join(OUTPUT_DIR, f"{name}.manifest.json")
     return bin_path, manifest_path
 
@@ -135,7 +212,13 @@ def compile_yaml():
         f.write(config)
 
     platform = data.get("platform") or detect_platform_from_yaml(config)
-    board = data.get("board") or ("esp32dev" if platform == "ESP32" else "nodemcuv2")
+    # Accept either label/id in request; default id from YAML if available
+    board_label, board_id = unify_board(data)
+    if not board_id:
+        board_id = "esp32dev" if platform == "ESP32" else "d1_mini"
+    if not board_label:
+        board_label = board_id
+
     chip_family = chip_family_for_platform(platform)
 
     def generate():
@@ -174,12 +257,6 @@ def compile_yaml():
             except Exception:
                 pass
 
-            # Optional: compute sha256 if you like (needs hashlib)
-            firmware_sha256 = None
-            # with open(output_bin, "rb") as fb:
-            #     import hashlib
-            #     firmware_sha256 = hashlib.sha256(fb.read()).hexdigest()
-
             manifest_data = {
                 "name": f"{name} Firmware",
                 "version": "1.0.0",
@@ -196,13 +273,18 @@ def compile_yaml():
             with open(manifest_path, "w", encoding="utf-8") as f:
                 json.dump(manifest_data, f)
 
+            # Optional: request may include config_json to keep registry in sync
+            config_json = data.get("config_json") or {}
+
             # upsert device registry
             upsert_device_record(
                 name=name,
                 platform=platform,
-                board=board,
+                board_label=board_label,
+                board_id=board_id,
                 yaml_text=config,
-                firmware_sha256=firmware_sha256
+                config_json=config_json,
+                firmware_sha256=None
             )
 
             yield "\n✅ Compilation successful!\n"
@@ -233,10 +315,17 @@ def flash_device():
         if not os.path.exists(yaml_path):
             return jsonify({"error": "YAML config not found."}), 404
 
-        # Load YAML content to detect platform/board for registry
         config_text = Path(yaml_path).read_text(encoding="utf-8")
         platform = detect_platform_from_yaml(config_text)
-        board = "esp32dev" if platform == "ESP32" else "nodemcuv2"
+        # Letzte bekannte Board-Daten aus Registry (wenn vorhanden)
+        db = _load_devices()
+        existing = next((d for d in db["devices"] if d.get("name") == name and d.get("platform") == platform), None)
+        board_label = existing.get("board_label") if existing else ""
+        board_id = existing.get("board_id") if existing else ""
+        if not board_id:
+            board_id = "esp32dev" if platform == "ESP32" else "d1_mini"
+        if not board_label:
+            board_label = board_id
 
         if method == "usb":
             compile_proc = subprocess.run(
@@ -245,7 +334,6 @@ def flash_device():
                 stderr=subprocess.STDOUT,
                 text=True
             )
-
             if compile_proc.returncode != 0:
                 return Response(compile_proc.stdout + "\n❌ Compile failed.\n", mimetype="text/plain")
 
@@ -253,11 +341,15 @@ def flash_device():
             if not manifest_path or not os.path.exists(manifest_path):
                 return jsonify({"error": "Manifest not found."}), 500
 
-            # Mark as "last flashed" in registry even for USB path
             upsert_device_record(
-                name=name, platform=platform, board=board, yaml_text=config_text, ip=ip, mac=mac
+                name=name,
+                platform=platform,
+                board_label=board_label,
+                board_id=board_id,
+                yaml_text=config_text,
+                ip=ip,
+                mac=mac
             )
-
             return jsonify({
                 "status": "ok",
                 "manifest_url": f"/firmware/{name}.manifest.json"
@@ -282,9 +374,14 @@ def flash_device():
                     returncode = proc.wait()
 
                     if returncode == 0:
-                        # mark device flashed in registry
                         upsert_device_record(
-                            name=name, platform=platform, board=board, yaml_text=config_text, ip=ip, mac=mac
+                            name=name,
+                            platform=platform,
+                            board_label=board_label,
+                            board_id=board_id,
+                            yaml_text=config_text,
+                            ip=ip,
+                            mac=mac
                         )
                         yield "\n✅ Flash successful.\n"
                     else:
@@ -303,31 +400,85 @@ def flash_device():
 
 @app.route("/api/devices", methods=["GET"])
 def api_list_devices():
-    return _load_devices()
+    db = _load_devices()
+    include = request.args.get("include", "")
+    items = []
+    for d in db.get("devices", []):
+        _migrate_device_inplace(d)
+        if include == "full":
+            items.append(d)
+        else:
+            items.append({
+                "id": d.get("id"),
+                "name": d.get("name"),
+                "friendly_name": d.get("friendly_name") or d.get("name"),
+                "platform": d.get("platform"),
+                "board": d.get("board") or d.get("board_label") or d.get("board_id"),
+                "ip": d.get("ip"),
+                "mac": d.get("mac"),
+                "flashed_at": d.get("flashed_at"),
+                "firmware_sha256": d.get("firmware_sha256"),
+            })
+    return jsonify({"devices": items}), 200
 
 @app.route("/api/devices/<dev_id>", methods=["GET"])
 def api_get_device(dev_id):
     db = _load_devices()
     for d in db["devices"]:
         if d.get("id") == dev_id:
-            return d
+            _migrate_device_inplace(d)
+            return jsonify(d), 200
+    return jsonify({"error": "Not found"}), 404
+
+@app.route("/api/devices/<dev_id>/yaml", methods=["GET"])
+def api_get_device_yaml(dev_id):
+    db = _load_devices()
+    for d in db["devices"]:
+        if d.get("id") == dev_id:
+            yaml_text = d.get("yaml") or d.get("yaml_snapshot") or ""
+            if not yaml_text:
+                return jsonify({"error": "YAML not found"}), 404
+            # Serve as attachment
+            filename = f"{(d.get('name') or 'device')}.yaml"
+            return Response(
+                yaml_text,
+                mimetype="application/x-yaml",
+                headers={
+                    "Content-Disposition": f'attachment; filename="{filename}"'
+                }
+            )
     return jsonify({"error": "Not found"}), 404
 
 @app.route("/api/devices", methods=["POST"])
 def api_upsert_device():
     """
-    Body: { id?, name, friendly_name?, platform, board, yaml, firmware_sha256?, ip?, mac?, tags?, notes? }
+    Body: {
+      id?, name, friendly_name?, platform,
+      board|board_label|board_id,
+      yaml|yaml_snapshot, config_json?,
+      firmware_sha256?, ip?, mac?, tags?, notes?, flashed_at?
+    }
     """
     payload = request.get_json(silent=True) or {}
     db = _load_devices()
 
+    # normalize incoming fields
+    yaml_in = payload.get("yaml") or payload.get("yaml_snapshot") or ""
+    board_label, board_id = unify_board(payload)
+    config_json = payload.get("config_json") or {}
+
+    # build device record
     dev = {
         "id": payload.get("id") or str(uuid.uuid4()),
         "name": payload.get("name", ""),
         "friendly_name": payload.get("friendly_name") or payload.get("name", ""),
         "platform": payload.get("platform", ""),
-        "board": payload.get("board", ""),
-        "yaml": payload.get("yaml", ""),
+        "board": board_label or board_id,
+        "board_label": board_label,
+        "board_id": board_id,
+        "yaml": yaml_in,
+        "yaml_snapshot": yaml_in,
+        "config_json": config_json,
         "firmware_sha256": payload.get("firmware_sha256"),
         "ip": payload.get("ip"),
         "mac": payload.get("mac"),
@@ -340,18 +491,17 @@ def api_upsert_device():
     # upsert by id
     for i, d in enumerate(db["devices"]):
         if d.get("id") == dev["id"]:
-            # move current to history if present
             hist = d.get("history", [])
             if d.get("flashed_at") or d.get("firmware_sha256"):
                 hist.append({"flashed_at": d.get("flashed_at"), "firmware_sha256": d.get("firmware_sha256")})
             dev["history"] = [h for h in hist if h.get("flashed_at")]
             db["devices"][i] = dev
             _save_devices(db)
-            return dev
+            return jsonify(dev), 200
 
     db["devices"].append(dev)
     _save_devices(db)
-    return dev
+    return jsonify(dev), 201
 
 @app.route("/api/devices/<dev_id>", methods=["DELETE"])
 def api_delete_device(dev_id):
@@ -361,7 +511,7 @@ def api_delete_device(dev_id):
     if len(db["devices"]) == before:
         return jsonify({"error": "Not found"}), 404
     _save_devices(db)
-    return {"ok": True}
+    return jsonify({"ok": True}), 200
 
 # ---------- Scanning ----------
 @app.route('/scan', methods=['GET'])
@@ -400,7 +550,6 @@ def scan():
 # ---------- Static + misc ----------
 @app.route("/")
 def index():
-    # Serves /app/www/index.html
     return send_from_directory(app.static_folder, "index.html")
 
 @app.route("/firmware/list", methods=["GET"])
