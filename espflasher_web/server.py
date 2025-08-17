@@ -451,57 +451,64 @@ def api_get_device_yaml(dev_id):
 
 @app.route("/api/devices", methods=["POST"])
 def api_upsert_device():
-    """
-    Body: {
-      id?, name, friendly_name?, platform,
-      board|board_label|board_id,
-      yaml|yaml_snapshot, config_json?,
-      firmware_sha256?, ip?, mac?, tags?, notes?, flashed_at?
-    }
-    """
-    payload = request.get_json(silent=True) or {}
+    p = request.get_json(silent=True) or {}
     db = _load_devices()
 
-    # normalize incoming fields
-    yaml_in = payload.get("yaml") or payload.get("yaml_snapshot") or ""
-    board_label, board_id = unify_board(payload)
-    config_json = payload.get("config_json") or {}
+    # Normalisieren: getrennte Felder
+    board_id    = p.get("board_id") or p.get("board") or ""
+    board_label = p.get("board_label") or ""
 
-    # build device record
     dev = {
-        "id": payload.get("id") or str(uuid.uuid4()),
-        "name": payload.get("name", ""),
-        "friendly_name": payload.get("friendly_name") or payload.get("name", ""),
-        "platform": payload.get("platform", ""),
-        "board": board_label or board_id,
-        "board_label": board_label,
+        "id": p.get("id") or None,  # kann None sein
+        "name": p.get("name", ""),
+        "friendly_name": p.get("friendly_name") or p.get("name", ""),
+        "platform": p.get("platform", ""),
         "board_id": board_id,
-        "yaml": yaml_in,
-        "yaml_snapshot": yaml_in,
-        "config_json": config_json,
-        "firmware_sha256": payload.get("firmware_sha256"),
-        "ip": payload.get("ip"),
-        "mac": payload.get("mac"),
-        "tags": payload.get("tags") or [],
-        "notes": payload.get("notes") or "",
-        "flashed_at": payload.get("flashed_at") or _iso_now(),
-        "history": payload.get("history") or []
+        "board_label": board_label,
+        "board": board_id,  # legacy
+        "yaml": p.get("yaml") or p.get("yaml_snapshot") or "",
+        "yaml_snapshot": p.get("yaml_snapshot") or p.get("yaml") or "",
+        "firmware_sha256": p.get("firmware_sha256"),
+        "ip": p.get("ip"),
+        "mac": p.get("mac"),
+        "tags": p.get("tags") or [],
+        "notes": p.get("notes") or "",
+        "flashed_at": p.get("flashed_at") or _iso_now(),
+        "history": p.get("history") or []
     }
 
-    # upsert by id
-    for i, d in enumerate(db["devices"]):
-        if d.get("id") == dev["id"]:
-            hist = d.get("history", [])
-            if d.get("flashed_at") or d.get("firmware_sha256"):
-                hist.append({"flashed_at": d.get("flashed_at"), "firmware_sha256": d.get("firmware_sha256")})
-            dev["history"] = [h for h in hist if h.get("flashed_at")]
-            db["devices"][i] = dev
-            _save_devices(db)
-            return jsonify(dev), 200
+    # 1) Upsert nach id
+    idx = None
+    if dev["id"]:
+        for i, d in enumerate(db["devices"]):
+            if d.get("id") == dev["id"]:
+                idx = i
+                break
 
-    db["devices"].append(dev)
+    # 2) Wenn keine id: Upsert nach (name+platform)
+    if idx is None and dev["name"] and dev["platform"]:
+        for i, d in enumerate(db["devices"]):
+            if d.get("name") == dev["name"] and d.get("platform") == dev["platform"]:
+                idx = i
+                dev["id"] = d.get("id")  # id erhalten
+                break
+
+    # 3) Update oder Insert
+    if idx is not None:
+        hist = db["devices"][idx].get("history", [])
+        if db["devices"][idx].get("flashed_at") or db["devices"][idx].get("firmware_sha256"):
+            hist.append({
+                "flashed_at": db["devices"][idx].get("flashed_at"),
+                "firmware_sha256": db["devices"][idx].get("firmware_sha256")
+            })
+        dev["history"] = [h for h in hist if h.get("flashed_at")]
+        db["devices"][idx] = { **db["devices"][idx], **dev }
+    else:
+        dev["id"] = dev["id"] or str(uuid.uuid4())
+        db["devices"].append(dev)
+
     _save_devices(db)
-    return jsonify(dev), 201
+    return dev
 
 @app.route("/api/devices/<dev_id>", methods=["DELETE"])
 def api_delete_device(dev_id):

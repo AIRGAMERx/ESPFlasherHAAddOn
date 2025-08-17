@@ -1,5 +1,5 @@
 name: ESPFlasher Web
-version: "1.0.6"
+version: "1.0.7"
 slug: espflasher_web
 description: Web-based interface to configure, compile, and flash ESP32 devices via OTA or USB (Web Serial). If there are some Issues with this app or you want to give a Feedback so dont be shy contact me on l.fink@lfdev.de
 url: https://github.com/AIRGAMERx/ESPFlasherHAAddOn
