@@ -11,11 +11,13 @@ import shutil
 import socket
 import subprocess
 import traceback
+import re
 
 # =========================
 # Flask & paths
 # =========================
 app = Flask(__name__, static_folder="/app/www", static_url_path="/")
+_NAME_RE = re.compile(r'(?m)^\s*esphome:\s*(?:#.*)?$|^\s*name:\s*["\']?([^"\']+)["\']?\s*(?:#.*)?$')
 CORS(app)
 
 YAML_DIR = "/data/yaml"
@@ -241,24 +243,46 @@ def get_firmware_paths(name: str) -> Tuple[Optional[str], Optional[str]]:
     return latest_path, manifest_path
 
 
+def extract_name_from_yaml(text: str) -> Optional[str]:
+    # sehr einfache Heuristik: suche die erste "name:"-Zeile nach "esphome:"
+    lines = text.splitlines()
+    in_esphome = False
+    for line in lines:
+        if re.match(r'^\s*esphome:\s*$', line):
+            in_esphome = True
+            continue
+        if in_esphome:
+            m = re.match(r'^\s*name:\s*["\']?([^"\']+)["\']?', line)
+            if m:
+                return m.group(1).strip()
+            if re.match(r'^\s*\w+:', line):  # nächster Top-Key → raus
+                break
+    return None
+
+
 # =========================
 # Routes
 # =========================
 @app.route("/compile", methods=["POST"])
 def compile_yaml():
     data = request.get_json(silent=True) or {}
-    name = _normalize_name(data.get("name", "device"))
-    config = data.get("configuration", "")
+    config = (data.get("configuration") or "").strip()
 
     if not config:
         return Response("❌ No YAML configuration received.\n",
                         status=400, mimetype="text/plain")
 
-    # YAML speichern, wo esphome ausgeführt wird
+    # Name bevorzugt aus YAML (Option B). Fallback: Request-Name.
+    yaml_name = extract_name_from_yaml(config)
+    req_name  = (data.get("name") or "device").strip()
+    name      = _normalize_name(yaml_name or req_name)
+
+    # YAML dort speichern, wo esphome arbeitet
     yaml_path = os.path.join(YAML_DIR, f"{name}.yaml")
     with open(yaml_path, "w", encoding="utf-8") as f:
         f.write(config)
 
+    # Rest wie gehabt
     platform = data.get("platform") or detect_platform_from_yaml(config)
     board_label, board_id = unify_board(data)
     if not board_id:
@@ -267,6 +291,8 @@ def compile_yaml():
         board_label = board_id
 
     chip_family = chip_family_for_platform(platform)
+    # ... (dein bisheriger Code geht hier weiter)
+
 
     def generate():
         try:
