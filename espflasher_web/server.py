@@ -12,6 +12,8 @@ import socket
 import subprocess
 import traceback
 import re
+import hashlib
+
 
 # =========================
 # Flask & paths
@@ -260,6 +262,45 @@ def extract_name_from_yaml(text: str) -> Optional[str]:
     return None
 
 
+
+def _sha256_file(path: str) -> str:
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(65536), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+def ensure_manifest_for_name(name: str, platform: str) -> tuple[str, str]:
+    """
+    Sucht/holt das neueste firmware(.factory).bin, kopiert sie nach OUTPUT_DIR/<name>.bin,
+    schreibt ein Manifest mit korrektem chipFamily und gibt (rel_manifest_url, sha256) zurück.
+    """
+    bin_src, _ = get_firmware_paths(name)
+    if not bin_src or not os.path.exists(bin_src):
+        raise FileNotFoundError("No firmware binary found after compile.")
+
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
+    bin_dst = os.path.join(OUTPUT_DIR, f"{name}.bin")
+    shutil.copyfile(bin_src, bin_dst)
+
+    chip_family = chip_family_for_platform(platform)
+    manifest_path = os.path.join(OUTPUT_DIR, f"{name}.manifest.json")
+    manifest_data = {
+        "name": f"{name} Firmware",
+        "version": "1.0.0",
+        "builds": [{
+            "chipFamily": chip_family,
+            "parts": [{"path": f"firmware/{name}.bin", "offset": 0}],
+        }],
+    }
+    with open(manifest_path, "w", encoding="utf-8") as f:
+        json.dump(manifest_data, f)
+
+    sha256 = _sha256_file(bin_dst)
+    return (f"/firmware/{name}.manifest.json", sha256)
+
+
+
 # =========================
 # Routes
 # =========================
@@ -409,6 +450,7 @@ def flash_device():
             board_label = board_id
 
         if method == "usb":
+    # 1) (Re-)Compile sicherstellen
             compile_proc = subprocess.run(
                 ["esphome", "compile", f"{name}.yaml"],
                 cwd=YAML_DIR,
@@ -419,11 +461,14 @@ def flash_device():
             if compile_proc.returncode != 0:
                 return Response(compile_proc.stdout + "\n❌ Compile failed.\n", mimetype="text/plain")
 
-            _, manifest_path = get_firmware_paths(name)
-            if not manifest_path:
-                return jsonify({"error": "Manifest not found."}), 500
+    # 2) Manifest + Bin im WWW-Verzeichnis sicherstellen
+            try:
+                manifest_rel, sha256 = ensure_manifest_for_name(name, platform)
+            except Exception as ex:
+                return jsonify({"error": f"Failed to prepare manifest: {ex}"}), 500
 
-            upsert_device_record(
+    # 3) Registry upserten (inkl. SHA)
+            saved = upsert_device_record(
                 name=name,
                 platform=platform,
                 board_label=board_label,
@@ -431,10 +476,14 @@ def flash_device():
                 yaml_text=config_text,
                 ip=ip,
                 mac=mac,
+                firmware_sha256=sha256,
             )
+
+    # 4) Client bekommt Manifest-URL + device_id
             return jsonify({
                 "status": "ok",
-                "manifest_url": f"/firmware/{name}.manifest.json"
+                "manifest_url": manifest_rel,
+                "device_id": saved.get("id"),
             })
 
         else:

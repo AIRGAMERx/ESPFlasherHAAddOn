@@ -1,8 +1,9 @@
 name: ESPFlasher Web
-version: "1.0.12"
+version: "1.0.13"
 slug: espflasher_web
 description: Web-based interface to configure, compile, and flash ESP32 devices via OTA or USB (Web Serial). If there are some Issues with this app or you want to give a Feedback so dont be shy contact me on l.fink@lfdev.de
 url: https://github.com/AIRGAMERx/ESPFlasherHAAddOn
+
 arch:
   - aarch64
   - amd64
@@ -12,16 +13,19 @@ arch:
 startup: application
 boot: auto
 
-
+# Für Web Serial empfohlen: ingress AUS
 ingress: false
 webui: "http://[HOST]:[PORT:8099]"
 
-
+# Port nach außen öffnen
 ports:
-  8099/tcp: 8099
+  "8099/tcp": 8099
 
+# Falls du KEINE apparmor.txt im Add-on-Ordner hast -> false
+apparmor: false
 
-apparmor: true
+# Supervisor prüft damit die Erreichbarkeit (und startet ggf. neu)
+watchdog: "http://[HOST]:[PORT:8099]/ping"
 
 options: {}
 schema: {}

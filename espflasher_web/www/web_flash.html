@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>ESP Web Flasher</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        body {
+            font-family: system-ui, Arial, sans-serif;
+            margin: 24px
+        }
+    </style>
+</head>
+
+<body>
+    <h1>ESP Web Flasher</h1>
+    <p id="status">Loading…</p>
+    <div id="app"></div>
+
+    <!-- Esphome Web Flasher UI (CDN) -->
+    <script type="module">
+        // Lies die Manifest-URL aus der Query
+        const params = new URLSearchParams(location.search);
+        const manifest = params.get('manifest');
+        const status = document.getElementById('status');
+
+        if (!('serial' in navigator)) {
+            status.textContent = 'Web Serial wird von diesem Browser nicht unterstützt. Bitte Chrome/Edge verwenden.';
+        } else if (!manifest) {
+            status.textContent = 'Kein Manifest übergeben (?manifest=URL).';
+        } else {
+            status.textContent = `Manifest: ${manifest}`;
+        }
+
+        // Du kannst hier eines der bekannten Flasher-UI Pakete einbinden, z.B.:
+        // import('https://unpkg.com/@esphome/esp-web-tools@9/dist/web/install-button.js?module')
+        //  .then(() => {
+        //    const btn = document.createElement('esp-web-install-button');
+        //    btn.manifest = manifest;
+        //    document.getElementById('app').appendChild(btn);
+        //    status.textContent = 'Bereit.';
+        //  })
+        //  .catch(err => status.textContent = 'Fehler beim Laden des Flashers: ' + err);
+    </script>
+</body>
+
+</html>
