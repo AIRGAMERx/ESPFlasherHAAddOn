@@ -172,28 +172,45 @@ def upsert_device_record(
 
 # ---------- Build artifacts ----------
 def get_firmware_paths(name: str) -> Tuple[Optional[str], Optional[str]]:
+    """Find latest built firmware .bin and target manifest path."""
     build_root = os.path.join(YAML_DIR, ".esphome", "build")
     if not os.path.exists(build_root):
         return None, None
+
     env_dirs = [d for d in os.listdir(build_root)
                 if os.path.isdir(os.path.join(build_root, d))]
     if not env_dirs:
         return None, None
+
     env_dirs.sort(key=lambda x: os.path.getmtime(os.path.join(build_root, x)), reverse=True)
     build_env = env_dirs[0]
-    build_dir = os.path.join(build_root, build_env, ".pioenvs", build_env)
-    bin_path = os.path.join(build_dir, "firmware.bin")
-    if not os.path.exists(bin_path):
-        bin_path = os.path.join(build_dir, "firmware.factory.bin")
+
+    # beide Varianten unterstützen:
+    candidates = [
+        os.path.join(build_root, build_env, ".pioenvs", build_env),     # alt
+        os.path.join(build_root, build_env, ".pio", "build", build_env) # neu
+    ]
+
+    bin_path = None
+    for base in candidates:
+        p1 = os.path.join(base, "firmware.bin")
+        p2 = os.path.join(base, "firmware.factory.bin")
+        if os.path.exists(p1):
+            bin_path = p1
+            break
+        if os.path.exists(p2):
+            bin_path = p2
+            break
+
     manifest_path = os.path.join(OUTPUT_DIR, f"{name}.manifest.json")
     return bin_path, manifest_path
+
 
 # ---------- Routes ----------
 @app.route("/compile", methods=["POST"])
 def compile_yaml():
     data = request.get_json(silent=True) or {}
-    raw_name = data.get("name", "device")
-    name = _normalize_name(raw_name)
+    name = data.get("name", "device").replace(" ", "_").lower()
     config = data.get("configuration", "")
 
     if not config:
@@ -211,20 +228,22 @@ def compile_yaml():
         board_label = board_id
 
     chip_family = chip_family_for_platform(platform)
-    config_json = data.get("config_json") or {}
 
     def generate():
         try:
             yield f"📥 YAML saved: {yaml_path}\n"
             yield "🚀 Starting compilation...\n\n"
 
+            # ⬇️ WICHTIG: im YAML_DIR ausführen und nur Dateiname übergeben
             proc = subprocess.Popen(
-                ["esphome", "compile", yaml_path],
+                ["esphome", "compile", f"{name}.yaml"],
+                cwd=YAML_DIR,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT,
                 text=True,
-                bufsize=1
+                bufsize=1,
             )
+
             for line in iter(proc.stdout.readline, ''):
                 yield line
             proc.stdout.close()
@@ -234,7 +253,7 @@ def compile_yaml():
                 yield f"\n❌ Compilation failed with code {returncode}.\n"
                 return
 
-            bin_path, _ = get_firmware_paths(name)
+            bin_path, _ = get_firmware_paths(name)  # sucht jetzt robust
             if not bin_path or not os.path.exists(bin_path):
                 yield "❌ No binary file found.\n"
                 return
@@ -242,8 +261,10 @@ def compile_yaml():
             output_bin = os.path.join(OUTPUT_DIR, f"{name}.bin")
             os.makedirs(OUTPUT_DIR, exist_ok=True)
             shutil.copyfile(bin_path, output_bin)
-            try: os.remove(bin_path)
-            except Exception: pass
+            try:
+                os.remove(bin_path)
+            except Exception:
+                pass
 
             manifest_data = {
                 "name": f"{name} Firmware",
@@ -257,22 +278,19 @@ def compile_yaml():
             with open(manifest_path, "w", encoding="utf-8") as f:
                 json.dump(manifest_data, f)
 
-            # Upsert registry and return device_id
-            dev = upsert_device_record(
+            config_json = data.get("config_json") or {}
+            upsert_device_record(
                 name=name,
                 platform=platform,
                 board_label=board_label,
                 board_id=board_id,
                 yaml_text=config,
                 config_json=config_json,
-                firmware_sha256=None
+                firmware_sha256=None,
             )
 
             yield "\n✅ Compilation successful!\n"
-            yield json.dumps({
-                "manifest_url": f"/firmware/{name}.manifest.json",
-                "device_id": dev["id"],
-            }) + "\n"
+            yield json.dumps({"manifest_url": f"/firmware/{name}.manifest.json"}) + "\n"
 
         except Exception as e:
             traceback.print_exc()
@@ -280,14 +298,15 @@ def compile_yaml():
 
     return Response(generate(), mimetype="text/plain")
 
+
 @app.route("/flash", methods=["POST"])
 def flash_device():
     try:
         data = request.get_json(silent=True) or {}
-        raw_name = data.get("name", "")
-        name = _normalize_name(raw_name)
+        name = data.get("name", "").replace(" ", "_").lower()
         method = data.get("method", "ota")
-        ip = data.get("ip"); mac = data.get("mac")
+        ip = data.get("ip")
+        mac = data.get("mac")
 
         if not name:
             return jsonify({"error": "No device name provided."}), 400
@@ -300,8 +319,7 @@ def flash_device():
         platform = detect_platform_from_yaml(config_text)
 
         db = _load_devices()
-        existing = next((d for d in db["devices"]
-                         if _normalize_name(d.get("name","")) == name and d.get("platform")==platform), None)
+        existing = next((d for d in db["devices"] if d.get("name") == name and d.get("platform") == platform), None)
         board_label = existing.get("board_label") if existing else ""
         board_id = existing.get("board_id") if existing else ""
         if not board_id:
@@ -311,10 +329,11 @@ def flash_device():
 
         if method == "usb":
             compile_proc = subprocess.run(
-                ["esphome", "compile", yaml_path],
+                ["esphome", "compile", f"{name}.yaml"],
+                cwd=YAML_DIR,  # ⬅️ wichtig
                 stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT,
-                text=True
+                text=True,
             )
             if compile_proc.returncode != 0:
                 return Response(compile_proc.stdout + "\n❌ Compile failed.\n", mimetype="text/plain")
@@ -324,24 +343,26 @@ def flash_device():
                 return jsonify({"error": "Manifest not found."}), 500
 
             upsert_device_record(
-                name=name, platform=platform, board_label=board_label, board_id=board_id,
-                yaml_text=config_text, ip=ip, mac=mac
+                name=name,
+                platform=platform,
+                board_label=board_label,
+                board_id=board_id,
+                yaml_text=config_text,
+                ip=ip, mac=mac,
             )
-            return jsonify({
-                "status": "ok",
-                "manifest_url": f"/firmware/{name}.manifest.json"
-            })
+            return jsonify({"status": "ok", "manifest_url": f"/firmware/{name}.manifest.json"})
 
         else:
             def generate():
                 try:
                     yield f"🚀 Starting OTA flash for {yaml_path}...\n\n"
                     proc = subprocess.Popen(
-                        ["esphome", "run", yaml_path],
+                        ["esphome", "run", f"{name}.yaml"],
+                        cwd=YAML_DIR,  # ⬅️ wichtig
                         stdout=subprocess.PIPE,
                         stderr=subprocess.STDOUT,
                         text=True,
-                        bufsize=1
+                        bufsize=1,
                     )
                     for line in iter(proc.stdout.readline, ''):
                         yield line
@@ -350,8 +371,9 @@ def flash_device():
 
                     if returncode == 0:
                         upsert_device_record(
-                            name=name, platform=platform, board_label=board_label, board_id=board_id,
-                            yaml_text=config_text, ip=ip, mac=mac
+                            name=name, platform=platform,
+                            board_label=board_label, board_id=board_id,
+                            yaml_text=config_text, ip=ip, mac=mac,
                         )
                         yield "\n✅ Flash successful.\n"
                     else:
@@ -359,6 +381,7 @@ def flash_device():
                 except Exception as e:
                     traceback.print_exc()
                     yield f"\n💥 Error during flash: {str(e)}\n"
+
             return Response(generate(), mimetype="text/plain")
 
     except Exception as e:
