@@ -251,9 +251,10 @@ def compile_yaml():
     config = data.get("configuration", "")
 
     if not config:
-        return Response("❌ No YAML configuration received.\n", status=400, mimetype="text/plain")
+        return Response("❌ No YAML configuration received.\n",
+                        status=400, mimetype="text/plain")
 
-    # Save YAML next to where esphome will run
+    # YAML speichern, wo esphome ausgeführt wird
     yaml_path = os.path.join(YAML_DIR, f"{name}.yaml")
     with open(yaml_path, "w", encoding="utf-8") as f:
         f.write(config)
@@ -272,7 +273,7 @@ def compile_yaml():
             yield f"📥 YAML saved: {yaml_path}\n"
             yield "🚀 Starting compilation...\n\n"
 
-            # Run esphome in YAML_DIR with only filename
+            # Wichtig: im YAML_DIR ausführen und nur den Dateinamen übergeben
             proc = subprocess.Popen(
                 ["esphome", "compile", f"{name}.yaml"],
                 cwd=YAML_DIR,
@@ -297,16 +298,17 @@ def compile_yaml():
             else:
                 yield f"📦 Found firmware at: {bin_path}\n"
 
-            output_bin = os.path.join(OUTPUT_DIR, f"{name}.bin")
+            # Bin in www/firmware spiegeln
             os.makedirs(OUTPUT_DIR, exist_ok=True)
+            output_bin = os.path.join(OUTPUT_DIR, f"{name}.bin")
             shutil.copyfile(bin_path, output_bin)
-
-            # (optional) keep original for debugging
+            # Optional: Original behalten; wenn du löschen willst, auskommentierten Block aktivieren
             # try:
             #     os.remove(bin_path)
             # except Exception:
             #     pass
 
+            # Web-Flasher Manifest schreiben
             manifest_data = {
                 "name": f"{name} Firmware",
                 "version": "1.0.0",
@@ -319,10 +321,10 @@ def compile_yaml():
             with open(manifest_path, "w", encoding="utf-8") as f:
                 json.dump(manifest_data, f)
 
-            # keep registry in sync (if UI passed config_json)
+            # Registry synchronisieren (falls UI state mitschickt)
             config_json = data.get("config_json") or {}
 
-            upsert_device_record(
+            saved_dev = upsert_device_record(
                 name=name,
                 platform=platform,
                 board_label=board_label,
@@ -333,13 +335,18 @@ def compile_yaml():
             )
 
             yield "\n✅ Compilation successful!\n"
-            yield json.dumps({"manifest_url": f"/firmware/{name}.manifest.json"}) + "\n"
+            # WICHTIG: Device-Objekt mitsenden -> Client kann saved_dev['id'] merken
+            yield json.dumps({
+                "manifest_url": f"/firmware/{name}.manifest.json",
+                "device": saved_dev
+            }) + "\n"
 
         except Exception as e:
             traceback.print_exc()
             yield f"💥 Error: {str(e)}\n"
 
     return Response(generate(), mimetype="text/plain")
+
 
 
 @app.route("/flash", methods=["POST"])
