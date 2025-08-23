@@ -576,7 +576,7 @@
       ]
     }
   },
-  "Segmentanzeigen": {
+  "Segment displays": {
     "MAX7219": {
       "platform": "max7219",
       "bus": [
@@ -792,7 +792,7 @@
       ]
     }
   },
-  "Addressierbare LEDs": {
+  "Addressable  LEDs": {
     "FastLED_Clockless": {
       "platform": "fastled_clockless",
       "bus": [
@@ -872,7 +872,7 @@
       },
       "info": [
         "One GPIO Pin required",
-        "Addressierbare RGB(W) LEDs"
+        "Addressable RGB(W) LEDs"
       ]
     },
     "FastLED_SPI": {

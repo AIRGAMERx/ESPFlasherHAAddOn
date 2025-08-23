@@ -1,5 +1,5 @@
 {
-  "Digitale GPIO Sensoren": {
+  "Digital GPIO sensors": {
     "DHT": {
       "platform": "dht",
       "bus": [
@@ -684,7 +684,7 @@
       }
     }
   },
-  "I2C Sensoren": {
+  "I2C sensors": {
     "BMP280": {
       "platform": "bmp280_i2c",
       "bus": [
@@ -2033,7 +2033,7 @@
       ]
     }
   },
-  "SPI Sensoren": {
+  "SPI sensors": {
     "MAX6675": {
       "platform": "max6675",
       "werte": [
@@ -2245,7 +2245,7 @@
       ]
     }
   },
-  "Interne Sensoren": {
+  "Interne sensors": {
     "wifi_signal": {
       "platform": "wifi_signal",
       "werte": [
@@ -2373,7 +2373,7 @@
       ]
     }
   },
-  "Analoge Sensoren / ADC": {
+  "Analog sensors / ADC": {
     "ADC": {
       "platform": "adc",
       "bus": [
@@ -2692,7 +2692,7 @@
       }
     }
   },
-  "Virtuelle / Software Sensoren": {
+  "Virtual / Software Sensors": {
     "template": {
       "platform": "template",
       "werte": [
