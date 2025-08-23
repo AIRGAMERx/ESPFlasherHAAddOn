@@ -18,11 +18,7 @@ Flash **ESP32/ESP8266** devices, build YAML visually, and manage previous flashe
 
 ---
 
-## 🧪 Status
 
-This is an **early** release intended for real‑world testing.
-- Suggested versioning for first public release: **`0.1.0`**
-- When the UI/flows stabilize, jump to **`1.0.0`**
 
 ---
 
