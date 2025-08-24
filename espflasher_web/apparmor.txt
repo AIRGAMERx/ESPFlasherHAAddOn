@@ -1,26 +1,20 @@
 #include <tunables/global>
-
-/usr/bin/python3 {
+profile "io.airgamer.espflasher-web" flags=(attach_disconnected,mediate_deleted) {
   #include <abstractions/base>
+  #include <abstractions/nameservice>
+  #include <abstractions/ssl_certs>
 
-  network inet stream,
-  network inet6 stream,
-  network inet dgram,
-  network inet6 dgram,
+  network inet,
+  network inet6,
 
-  /data/** rwk,
-  /tmp/** rw,
-  /etc/ssl/** r,
-
-  /usr/bin/** rix,
-  /usr/lib/** mr,
+  /usr/bin/**       rix,
+  /usr/lib/**       mr,
   /usr/local/lib/** mr,
 
-  /dev/null rw,
-  /dev/urandom r,
+  /data/**          rwk,
+  /tmp/**           rwk,
+  /etc/ssl/**       r,
 
-  deny /mnt/** rwklx,
-  deny /media/** rwklx,
-  deny /share/** rwklx,
-  deny /config/** rwklx,
+  /dev/null         rw,
+  /dev/urandom      r,
 }
