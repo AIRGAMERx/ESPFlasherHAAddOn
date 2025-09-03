@@ -1,0 +1,77 @@
+{
+    "RAW_YAML_BLOCK": {
+        "platform": "raw_yaml",
+        "bus": [],
+        "werte": [],
+        "required": [
+            "path",
+            "position",
+            "content"
+        ],
+        "optional": [
+            "order"
+        ],
+        "baseconfig": [],
+        "filter": [],
+        "disable_by_default": [
+            "True",
+            "False"
+        ],
+        "nested_fields": {},
+        "ui_fields": {
+            "path": {
+                "type": "ComboBox",
+                "values": [
+                    "top",
+                    "substitutions",
+                    "esphome",
+                    "platform",
+                    "esp32",
+                    "esp8266",
+                    "wifi",
+                    "api",
+                    "logger",
+                    "ota",
+                    "web_server",
+                    "globals",
+                    "sensor",
+                    "binary_sensor",
+                    "text_sensor",
+                    "switch",
+                    "number",
+                    "select",
+                    "button",
+                    "cover",
+                    "display",
+                    "output",
+                    "interval",
+                    "on_boot",
+                    "bottom"
+                ]
+            },
+            "position": {
+                "type": "ComboBox",
+                "values": [
+                    "before",
+                    "after",
+                    "replace"
+                ]
+            },
+            "order": {
+                "type": "NumericUpDown",
+                "min": 0,
+                "max": 1000,
+                "step": 1
+            },
+            "content": {
+                "type": "TextBox",
+                "multiline": true,
+                "placeholder": "# raw YAML here"
+            }
+        },
+        "info": [
+            "Injects a raw YAML snippet at the selected path.",
+            "Use with care: invalid YAML will break compilation."
+        ]
+    }
+}

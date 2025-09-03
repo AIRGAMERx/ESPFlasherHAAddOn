@@ -685,6 +685,97 @@
     }
   },
   "I2C sensors": {
+    "AGS10": {
+      "platform": "ags10",
+      "bus": [
+        "i2c"
+      ],
+      "werte": [
+        "TVOC",
+        "Resistance",
+        "Version"
+      ],
+      "required": [],
+      "optional": [
+        "address",
+        "update_interval"
+      ],
+      "baseconfig": [
+        "filter",
+        "disabled_by_default"
+      ],
+      "filter": [
+        "offset",
+        "multiply",
+        "median",
+        "filter_out",
+        "calibrate_linear",
+        "calibrate_polynomial",
+        "sliding_window_moving_average"
+      ],
+      "disable_by_default": [
+        "True",
+        "False"
+      ],
+      "nested_fields": {
+        "tvoc": [
+          "name",
+          "accuracy_decimals"
+        ],
+        "resistance": [
+          "name",
+          "accuracy_decimals"
+        ],
+        "version": [
+          "name",
+          "accuracy_decimals"
+        ]
+      },
+      "ui_fields": {
+        "address": {
+          "type": "TextBox",
+          "placeholder": "0x1A"
+        },
+        "update_interval": {
+          "type": "NumericUpDown",
+          "min": 1,
+          "max": 3600,
+          "step": 1
+        },
+        "tvoc_name": {
+          "type": "TextBox"
+        },
+        "tvoc_accuracy_decimals": {
+          "type": "NumericUpDown",
+          "min": 0,
+          "max": 2,
+          "step": 1
+        },
+        "resistance_name": {
+          "type": "TextBox"
+        },
+        "resistance_accuracy_decimals": {
+          "type": "NumericUpDown",
+          "min": 0,
+          "max": 3,
+          "step": 1
+        },
+        "version_name": {
+          "type": "TextBox"
+        },
+        "version_accuracy_decimals": {
+          "type": "NumericUpDown",
+          "min": 0,
+          "max": 1,
+          "step": 1
+        }
+      },
+      "info": [
+        "I2C Bus required",
+        "Default I2C address is 0x1A",
+        "Set I2C frequency to ≤ 15 kHz"
+      ]
+    },
     "BMP280": {
       "platform": "bmp280_i2c",
       "bus": [
