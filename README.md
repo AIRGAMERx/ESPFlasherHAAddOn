@@ -2,27 +2,27 @@
 
 Flash **ESP32/ESP8266** devices, build YAML visually, and manage previous flashes — all from a sleek web UI inside **Home Assistant**.
 
-> Hobby project. PRs & feedback welcome! 🚀
+> Hobby project. PRs & feedback welcome! 
 
 ---
 
-## ✨ Features
+##  Features
 
-- 🔌 **OTA** — Compile and flash ESPHome firmware (OTA)
-- 🧩 **Visual config editor** — Basic setup, buses (I²C/SPI/UART/OneWire), components, and live **YAML preview**
-- 📦 **Device history** — View, restore, download YAML for previous flashes
-- 💾 **Saved components (presets)** — Reuse your favorite sensor/display configs
-- 🗺️ **ESP pinout overlay** — Quickly check used pins
-- 🎨 **Theme & i18n** — Light/Dark/System, languages: **English, Deutsch, Français**
-- ⚙️ **Backend API configurable** — Set base URL/port, test with `/ping`
-
----
-
-
+-  **OTA** — Compile and flash ESPHome firmware (OTA)
+-  **Visual config editor** — Basic setup, buses (I²C/SPI/UART/OneWire), components, and live **YAML preview**
+-  **Device history** — View, restore, download YAML for previous flashes
+-  **Saved components (presets)** — Reuse your favorite sensor/display configs
+-  **ESP pinout overlay** — Quickly check used pins
+-  **Theme & i18n** — Light/Dark/System, languages: **English, Deutsch, Français**
+-  **Backend API configurable** — Set base URL/port, test with `/ping`
 
 ---
 
-## 🖼️ Screenshots 
+
+
+---
+
+##  Screenshots 
 Main
 <img width="2558" height="1293" alt="image" src="https://github.com/user-attachments/assets/80ffab25-3042-49e2-bd0f-0c9b39929ae5" />
 Bus Configuration
@@ -39,7 +39,7 @@ Pinout
 
 ---
 
-## 🚀 Installation (Home Assistant)
+##  Installation (Home Assistant)
 
 1) **Add Repository**  
 Open **Settings → Add‑ons → Add‑on Store → ⋮ → Repositories** and add:
@@ -67,21 +67,21 @@ https://github.com/AIRGAMERx/ESPFlasherHAAddOn
 
 ---
 
-## 🌍 Language & Theme
+##  Language & Theme
 
 - Switch language from the **AppBar** (🌐 icon): **English / Deutsch / Français / System default**
 - Switch theme with the **Theme** (☀️/🌙) button: **Light / Dark / System**
 
 ---
 
-## 🛠️ Requirements
+##  Requirements
 
 - Home Assistant (for the add‑on experience), or a reachable backend API for standalone web
 - ESPHome toolchain available inside the add‑on container (handled by the add‑on)
 
 ---
 
-## 🏗️ Architecture (high level)
+##  Architecture (high level)
 
 - **Frontend:** Flutter Web app (Material 3, i18n, persistent settings)
 - **Backend (in add‑on):** Serves the web app and exposes endpoints such as:
@@ -95,7 +95,7 @@ Exact endpoints may evolve — see the code for current definitions.
 
 ---
 
-## 🧰 Troubleshooting
+##  Troubleshooting
 
 - **API Test fails**: Use **Settings → API Connection → Test Connection**. Check base URL, port, and network reachability. Endpoint must return `200` with body `pong` on `/ping`.
 - **Compile errors**: Inspect the YAML preview, check board/platform IDs, and verify component options.
@@ -103,26 +103,26 @@ Exact endpoints may evolve — see the code for current definitions.
 
 ---
 
-## 🔒 Security Notes
+##  Security Notes
 
 The add‑on may request elevated capabilities to access serial devices and expose a local API. Only install from trusted sources and review permissions. If you plan to expose it outside your LAN, put it behind proper authentication and TLS.
 
 ---
 
-## 🗺️ Roadmap (Ideas)
+## Roadmap (Ideas)
 
-- 🧙‍♂️ **First‑run wizard** to guide beginners through a minimal working config
-- 🧩 More components, smarter presets & recipe suggestions
-- 🔄 Import from raw YAML to pre‑fill the visual editor
-- 🧪 Hardware sanity checks (boot‑strap pins, conflicts)
-- 📶 Wi‑Fi provisioning helpers
-- 🧭 Guided flashing for absolute beginners
+-  **First‑run wizard** to guide beginners through a minimal working config
+-  More components, smarter presets & recipe suggestions
+- Import from raw YAML to pre‑fill the visual editor
+-  Hardware sanity checks (boot‑strap pins, conflicts)
+-  Wi‑Fi provisioning helpers
+-  Guided flashing for absolute beginners
 
 Have ideas? Please open an issue!
 
 ---
 
-## 🤝 Contributing
+##  Contributing
 
 1. Fork the repo & create a feature branch
 2. Commit with clear messages
@@ -138,7 +138,7 @@ Bug reports are welcome — include repro steps and logs where possible.
 
 ---
 
-## 🙏 Credits
+##  Credits
 
 Created by **[AIRGAMERx](https://github.com/AIRGAMERx)**  
 Built on the shoulders of:
@@ -148,23 +148,23 @@ Built on the shoulders of:
 
 ---
 
-## 📮 Support & Links
+##  Support & Links
 
 - **GitHub Repository:** <https://github.com/AIRGAMERx/ESPFlasherHAAddOn>
 - **Issues (Bugs/Feature Requests):** <https://github.com/AIRGAMERx/ESPFlasherHAAddOn/issues>
 - **Buy Me a Coffee:** <https://buymeacoffee.com/airgamer>
 
-## ⚠️ Disclaimer & Support Policy
+## ⚠ Disclaimer & Support Policy
 
-This is a **hobby project**. There’s **no warranty**, **no guaranteed support**, and **no response-time SLA**. I’m happy to receive constructive feedback — please be kind and patient. 🙏
+This is a **hobby project**. There’s **no warranty**, **no guaranteed support**, and **no response-time SLA**. I’m happy to receive constructive feedback — please be kind and patient. 
 
 Before opening an issue:
-- 🔎 First **search existing issues** and check the **docs**.
-- 🧪 Provide **repro steps**, **logs/error messages**, your **versions** (add-on/app, ESPHome, Home Assistant, browser), and relevant **YAML/configs**.
-- 💡 **Feature requests**: describe the **use case** — **PRs** are very welcome!
-- 🔐 For **security** topics, please **don’t post publicly** (use GitHub Security Advisory or email if available).
+-  First **search existing issues** and check the **docs**.
+-  Provide **repro steps**, **logs/error messages**, your **versions** (add-on/app, ESPHome, Home Assistant, browser), and relevant **YAML/configs**.
+-  **Feature requests**: describe the **use case** — **PRs** are very welcome!
+-  For **security** topics, please **don’t post publicly** (use GitHub Security Advisory or email if available).
 
-Kindness > demands. Thanks! ❤️
+Kindness > demands. Thanks! 
 
   
 
